@@ -1,0 +1,32 @@
+{
+  "name": "nextjs-setup",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/roboto": "^5.1.0",
+    "@mui/icons-material": "^6.1.0",
+    "@mui/material": "^6.1.0",
+    "@mui/x-date-pickers": "^7.17.0",
+    "@tanstack/react-query": "^5.56.2",
+    "date-fns": "^3.6.0",
+    "firebase": "^10.13.1",
+    "firebaseui": "^6.1.0",
+    "next": "14.2.11",
+    "react": "^18",
+    "react-dom": "^18",
+    "recoil": "^0.7.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.11"
+  }
+}

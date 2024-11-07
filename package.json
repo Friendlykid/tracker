@@ -1,0 +1,17 @@
+{
+  "name": "bachelor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:local": "npm run dev:frontend && npm run dev:tracker ",
+    "dev:frontend": "cd packages/frontend && npm run dev",
+    "dev:tracker": "cd packages/tracker && npm run dev"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "Jiri Kouba",
+  "license": "ISC"
+}
