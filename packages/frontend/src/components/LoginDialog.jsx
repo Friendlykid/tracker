@@ -104,7 +104,7 @@ export default function Login({ open, handleClose }) {
             <Button type="submit">{tabItem ? "Register" : "Log in"}</Button>
             <Button
               startIcon={<Google />}
-              onClick={() => signIn(googleProvider)}
+              onClick={() => signIn({ provider: googleProvider })}
             >
               Log in with Google
             </Button>

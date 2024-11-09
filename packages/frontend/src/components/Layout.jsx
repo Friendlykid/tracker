@@ -13,10 +13,12 @@ const Layout = ({ children }) => {
   const user = useUser();
 
   useEffect(() => {
-    if (!user) {
-      if (router.asPath !== "/") router.replace("/");
-    } else if (!user.emailVerified) {
-      if (router.asPath !== "/verify") router.replace("/verify");
+    if (!user && router.asPath !== "/") {
+      router.push("/");
+    } else if (user && !user.emailVerified && router.asPath !== "/verify") {
+      router.push("/verify");
+    } else if (user && router.asPath === "/") {
+      router.push("/dashboard");
     }
   }, [user, router]);
   return (
