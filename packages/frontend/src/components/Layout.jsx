@@ -1,4 +1,11 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  styled,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
 import Login from "./LoginDialog";
@@ -6,6 +13,23 @@ import SwitchTheme from "./SwitchTheme";
 import { UserCircle } from "./UserCircle";
 import { useUser } from "@/lib/query";
 import { useRouter } from "next/router";
+
+export const MainStyle = styled("main")(({ theme }) => {
+  return {
+    flexGrow: 1,
+    paddingTop: 24,
+    paddingBottom: 24,
+    width: "100%",
+    [theme.breakpoints.up("xs")]: {
+      paddingLeft: 25,
+      paddingRight: 25,
+    },
+    [theme.breakpoints.up("md")]: {
+      paddingTop: 24,
+      paddingBottom: 24,
+    },
+  };
+});
 
 const Layout = ({ children }) => {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -23,7 +47,13 @@ const Layout = ({ children }) => {
   }, [user, router]);
   return (
     <>
-      <Box sx={{ flexGrow: 1, height: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+        }}
+      >
         <AppBar position="static">
           <Toolbar>
             <IconButton
@@ -43,7 +73,7 @@ const Layout = ({ children }) => {
           </Toolbar>
         </AppBar>
 
-        <main style={{ height: "100%" }}>{children}</main>
+        <MainStyle>{children}</MainStyle>
       </Box>
       <Login open={loginOpen} handleClose={() => setLoginOpen(false)} />
     </>
