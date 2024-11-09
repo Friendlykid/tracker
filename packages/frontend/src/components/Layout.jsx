@@ -1,26 +1,27 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { auth } from "@/firebase/firebase";
-import { useState } from "react";
-import Login from "./Login";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import { useEffect, useState } from "react";
+import Login from "./LoginDialog";
 import SwitchTheme from "./SwitchTheme";
-import { useRecoilValue } from "recoil";
-import { userAtom } from "@/lib/recoilProvider";
+import { UserCircle } from "./UserCircle";
+import { useUser } from "@/lib/query";
+import { useRouter } from "next/router";
 
 const Layout = ({ children }) => {
-  const user = useRecoilValue(userAtom);
   const [loginOpen, setLoginOpen] = useState(false);
+  const router = useRouter();
+  const user = useUser();
+
+  useEffect(() => {
+    if (!user) {
+      if (router.asPath !== "/") router.replace("/");
+    } else if (!user.emailVerified) {
+      if (router.asPath !== "/verify") router.replace("/verify");
+    }
+  }, [user, router]);
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, height: "100vh" }}>
         <AppBar position="static">
           <Toolbar>
             <IconButton
@@ -36,18 +37,11 @@ const Layout = ({ children }) => {
               Appka
             </Typography>
             <SwitchTheme />
-            {user ? (
-              <IconButton>
-                <AccountCircle />
-              </IconButton>
-            ) : (
-              <Button color="inherit" onClick={() => setLoginOpen(true)}>
-                Log in
-              </Button>
-            )}
+            <UserCircle openLogin={() => setLoginOpen(true)} />
           </Toolbar>
         </AppBar>
-        <main>{children}</main>
+
+        <main style={{ height: "100%" }}>{children}</main>
       </Box>
       <Login open={loginOpen} handleClose={() => setLoginOpen(false)} />
     </>
