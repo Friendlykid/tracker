@@ -4,7 +4,13 @@ import {
 } from "@/firebase/auth";
 import { auth, db } from "@/firebase/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { signInWithPopup } from "firebase/auth";
+import {
+  AuthCredential,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  signInWithPopup,
+  updatePassword,
+} from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -108,4 +114,37 @@ export const useUser = () => {
   if (!data) return;
 
   return data;
+};
+
+export const useReauthenticateUser = ({ onError, onSuccess }) => {
+  const user = useUser();
+  return useMutation({
+    mutationKey: ["revalidateUser"],
+    mutationFn: async (password) => {
+      if (!user) return false;
+      const credential = EmailAuthProvider.credential(user.email, password);
+      try {
+        await reauthenticateWithCredential(user, credential);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+    onError,
+    onSuccess,
+  });
+};
+
+export const useSetPassword = ({ onError, onSuccess }) => {
+  const user = useUser();
+  return useMutation({
+    mutationKey: ["setPassword"],
+    mutationFn: async (newPassword) => {
+      if (!user) return false;
+
+      return updatePassword(user, newPassword);
+    },
+    onError,
+    onSuccess,
+  });
 };
