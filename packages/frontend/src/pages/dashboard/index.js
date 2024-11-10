@@ -6,5 +6,5 @@ export default function Home() {
   console.log(user);
   console.log(lastVisited);
   if (lastVisited) console.log(lastVisited);
-  return <Layout>Sem tu</Layout>;
+  return <Layout title="Dashboard">Sem přihlášenej</Layout>;
 }

@@ -6,13 +6,14 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
 import Login from "./LoginDialog";
 import SwitchTheme from "./SwitchTheme";
 import { UserCircle } from "./UserCircle";
 import { useUser } from "@/lib/query";
 import { useRouter } from "next/router";
+import { Visibility } from "@mui/icons-material";
+import Head from "next/head";
 
 export const MainStyle = styled("main")(({ theme }) => {
   return {
@@ -31,7 +32,7 @@ export const MainStyle = styled("main")(({ theme }) => {
   };
 });
 
-const Layout = ({ children }) => {
+const Layout = ({ children, title }) => {
   const [loginOpen, setLoginOpen] = useState(false);
   const router = useRouter();
   const user = useUser();
@@ -60,10 +61,14 @@ const Layout = ({ children }) => {
               size="large"
               edge="start"
               color="inherit"
-              aria-label="menu"
               sx={{ mr: 2 }}
+              onClick={() => {
+                if (router.asPath !== "/dashboard" && user) {
+                  router.push("/dashboard");
+                }
+              }}
             >
-              <MenuIcon />
+              <Visibility />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Appka
@@ -72,7 +77,9 @@ const Layout = ({ children }) => {
             <UserCircle openLogin={() => setLoginOpen(true)} />
           </Toolbar>
         </AppBar>
-
+        <Head>
+          <title>Crypto adress watch{title ? ` - ${title}` : ""}</title>
+        </Head>
         <MainStyle>{children}</MainStyle>
       </Box>
       <Login open={loginOpen} handleClose={() => setLoginOpen(false)} />
