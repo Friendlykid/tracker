@@ -10,8 +10,13 @@
   "author": "Jiri Kouba",
   "license": "ISC",
   "dependencies": {
+    "alchemy-sdk": "^3.4.7",
     "firebase": "^10.13.1",
-    "firebase-admin": "^12.7.0"
+    "firebase-admin": "^12.7.0",
+    "node-cache": "^5.1.2",
+    "satoshi-bitcoin": "^1.0.5",
+    "web3-utils": "^4.3.2",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
