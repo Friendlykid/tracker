@@ -1,10 +1,11 @@
 import { getBtcBlockHeight } from "../config/cache.js";
 import { db } from "../config/firebase.js";
+import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { getAddressBalance } from "./getBlockchainInfo.js";
 import { subscribeBtcAddress, unsubscribeBtcAddress } from "./websocket.js";
 
 export const updateBtcAddresses = async () => {
-  const addrRef = db.collection("btc_addresses");
+  const addrRef = db.collection(COLLECTIONS.BTC_ADDRESSES);
   addrRef.onSnapshot((snapshot) => {
     snapshot.docChanges().forEach(async (change) => {
       if (change.type === "added") {

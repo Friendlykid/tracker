@@ -1,8 +1,9 @@
 import { db } from "../config/firebase.js";
+import { COLLECTIONS } from "../config/firestoreConstants.js";
 
 export const getActiveAddresses = async () => {
-  const addrRef = db.collection("btc_addresses");
-  const snapshot = await addrRef.where("user_counter", ">", 0).get();
+  const collref = db.collection(COLLECTIONS.BTC_ADDRESSES);
+  const snapshot = await collref.where("user_counter", ">", 0).get();
   if (snapshot.empty) {
     console.log("no addresses to track");
     return [];

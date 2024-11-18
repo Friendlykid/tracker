@@ -10,6 +10,7 @@
 
 # testing
 /coverage
+packages/tracker/text.json
 
 # next.js
 /packages/frontend/.next/
