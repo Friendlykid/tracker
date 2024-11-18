@@ -7,5 +7,3 @@ export const app = initializeApp({
 });
 
 export const db = getFirestore(app);
-
-export const getCollection = (collection) => db.collection(collection);

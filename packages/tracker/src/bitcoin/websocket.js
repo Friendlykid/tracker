@@ -9,7 +9,7 @@ export const btcNewBlocks = () => {
   wsTemplate({
     open: { op: "blocks_sub" },
     message: (block) => {
-      console.log("newBlock:", block);
+      console.log("new BTC block found", block.x.hash);
       const newHeight = block.x.height;
       const hash = block.x.hash;
       updateBtcBlockHeight(newHeight);
@@ -17,17 +17,6 @@ export const btcNewBlocks = () => {
     },
     error: btcNewBlocks,
     close: btcNewBlocks,
-  });
-};
-
-export const unconfirmed = () => {
-  wsTemplate({
-    open: { op: "unconfirmed_sub" },
-    message: (tx) => {
-      console.log("newTx:", tx);
-    },
-    error: unconfirmed,
-    close: unconfirmed,
   });
 };
 
@@ -44,7 +33,6 @@ export const subscribeBtcAddress = (addr) => {
       console.error("WebSocket error:", error);
     },
     close: () => {
-      console.log("Restarting connection for address:", addr);
       subscribeBtcAddress(addr); // Reconnect on close
     },
   });

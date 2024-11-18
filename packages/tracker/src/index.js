@@ -9,4 +9,4 @@ import { cacheTokens } from "./config/cache.js";
 })();
 
 // just to keep the service going
-setInterval(() => {}, 1000);
+setInterval(() => {}, 1 << 30);
