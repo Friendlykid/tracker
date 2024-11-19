@@ -1,5 +1,6 @@
 import NodeCache from "node-cache";
 import { getLastBtcBlockHeight } from "../bitcoin/getBlockchainInfo.js";
+import { alchemy } from "./alchemy.js";
 
 const cache = new NodeCache({ stdTTL: 0 });
 const btcTxCache = new NodeCache();
@@ -17,8 +18,14 @@ export const cacheTokens = async () => {
   }
 };
 
-export const getTokenInfo = (addr) => {
-  return cache.get(addr);
+export const getTokenInfo = async (addr) => {
+  if (cache.has(addr)) {
+    return cache.get(addr);
+  }
+  const { logo, ...other } = await alchemy.core.getTokenMetadata(addr);
+  const info = { ...other, logoURI: logo };
+  cache.set(addr, info);
+  return info;
 };
 
 export const getBtcBlockHeight = async () => {
