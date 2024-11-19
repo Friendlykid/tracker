@@ -6,29 +6,32 @@ import { getTokenInfo } from "../config/cache.js";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { weiToEther } from "../utils/conversion.js";
+import { randomUUID } from "crypto";
 
 const TRANSFER_EVENT = keccak256("Transfer(address,address,uint256)");
 
 const sendERC20Transaction =
-  (symbol = "", addr) =>
+  (operator = "", addr) =>
   async (tx) => {
     const senderAddr = decodeAddress(tx.topics[1]);
     const amount = BigNumber.from(tx.data);
     const tokenAddress = tx.address;
-    const tokenInfo = getTokenInfo(tokenAddress) ?? {
-      ...(await alchemy.core.getTokenMetadata(addr)),
-    };
-    const tokenAmount = amount.div(tokenInfo.decimals);
-    db.doc(COLLECTIONS.ETH_TXS(addr, tx.transactionHash)).set({
-      amount: `${symbol}${tokenAmount.toString()}`,
+    const { name, logoURI, symbol, decimals } = await getTokenInfo(
+      tokenAddress
+    );
+    const tokenAmount = amount.div(decimals);
+    db.doc(
+      COLLECTIONS.ETH_TXS(addr, `${tx.transactionHash}-${Number(tx.logIndex)}`)
+    ).set({
+      amount: `${operator}${tokenAmount.toString()}`,
       from: senderAddr,
       to: addr,
       blockNumber: tx.blockNumber,
       blockHash: tx.blockHash,
       contractAddress: tx.address,
-      tokenName: tokenInfo.name,
-      logoURI: tokenInfo.logoURI ?? tokenInfo.logo,
-      symbol: tokenInfo.symbol,
+      tokenName: name,
+      logoURI: logoURI,
+      symbol: symbol,
     });
   };
 
@@ -73,8 +76,6 @@ export const subscribeEthAddress = (addr) => {
       });
     }
   );
-
-  alchemy.ws.off;
 };
 
 export const subscribeEthERC20Address = (addr = []) => {

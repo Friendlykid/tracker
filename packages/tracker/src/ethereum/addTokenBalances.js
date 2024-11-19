@@ -10,9 +10,7 @@ export const addTokenBalances = async (addr) => {
 
   await Promise.all(
     tokenBalances.map(async ({ contractAddress, tokenBalance }) => {
-      const tokenInfo =
-        getTokenInfo(tokenAddress) ??
-        (await alchemy.core.getTokenMetadata(addr));
+      const { logoURI, symbol, decimals } = await getTokenInfo(tokenAddress);
 
       batch.set(
         db
@@ -21,11 +19,9 @@ export const addTokenBalances = async (addr) => {
           .collection(COLLECTIONS.TOKENS)
           .doc(contractAddress),
         {
-          amount: BigNumber.from(tokenBalance)
-            .div(tokenInfo.decimals)
-            .toString(),
-          logoURI: tokenInfo.logoURI ?? tokenInfo.logo,
-          symbol: tokenInfo.symbol,
+          amount: BigNumber.from(tokenBalance).div(decimals).toString(),
+          logoURI: logoURI,
+          symbol: symbol,
         }
       );
     })
