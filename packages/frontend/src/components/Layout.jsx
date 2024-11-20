@@ -78,7 +78,9 @@ const Layout = ({ children, title }) => {
           </Toolbar>
         </AppBar>
         <Head>
-          <title>Crypto adress watch{title ? ` - ${title}` : ""}</title>
+          <title>
+            {title ? `Crypto adress watch - ${title}` : "Crypto adress watch"}
+          </title>
         </Head>
         <MainStyle>{children}</MainStyle>
       </Box>

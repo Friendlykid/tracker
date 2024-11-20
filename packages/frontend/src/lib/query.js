@@ -5,7 +5,6 @@ import {
 import { auth, db } from "@/firebase/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  AuthCredential,
   EmailAuthProvider,
   reauthenticateWithCredential,
   signInWithPopup,

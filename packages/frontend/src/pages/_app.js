@@ -1,8 +1,9 @@
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
-import ThemeProvider from "@/theme/ThemeProvider";
 import { SnackbarProvider } from "notistack";
+import { useCreateTheme } from "@/theme/theme";
+import { ThemeContextProvider } from "@/theme/ThemeContextProvider";
 
 const queryClient = new QueryClient();
 
@@ -11,10 +12,10 @@ export default function App({ Component, pageProps }) {
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <SnackbarProvider>
-          <ThemeProvider>
+          <ThemeContextProvider>
             <CssBaseline />
             <Component {...pageProps}></Component>
-          </ThemeProvider>
+          </ThemeContextProvider>
         </SnackbarProvider>
       </QueryClientProvider>
     </RecoilRoot>

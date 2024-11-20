@@ -1,13 +1,30 @@
 import { createTheme } from "@mui/material";
 
 // později přidáš další změny, např v barvách
+const lightPalette = {
+  mode: "light",
+  primary: { main: "#FF9800", light: "#FFE0B2" },
+  secondary: { main: "#607D8B", light: "#FF9800" },
+  text: {
+    primary: "#212121",
+    secondary: "#757575",
+  },
+};
 
-export const setupTheme = (mode) => {
+const darkPalette = {
+  mode: "dark",
+  primary: { main: "#F57C00" },
+  secondary: { main: "#757575" },
+};
+
+export const useCreateTheme = (mode) => {
   const theme = createTheme({
-    palette: {
-      mode,
-      primary: { main: "#C09366" },
-      secondary: { main: "#6693C0" },
+    palette: mode === "light" ? lightPalette : darkPalette,
+    cssVariables: {
+      colorSchemeSelector: "class",
+    },
+    cssVariables: {
+      colorSchemeSelector: "class",
     },
   });
   return theme;
