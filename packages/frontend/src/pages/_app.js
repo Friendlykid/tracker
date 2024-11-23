@@ -1,8 +1,7 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
 import { SnackbarProvider } from "notistack";
-import { useCreateTheme } from "@/theme/theme";
 import { ThemeContextProvider } from "@/theme/ThemeContextProvider";
 
 const queryClient = new QueryClient();

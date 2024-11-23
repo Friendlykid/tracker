@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout/Layout";
 import { useReauthenticateUser, useSetPassword, useUser } from "@/lib/query";
 import { Delete } from "@mui/icons-material";
 import {

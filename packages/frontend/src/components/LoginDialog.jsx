@@ -13,10 +13,12 @@ import {
 import { useMemo, useState } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { useRegisterUser, useSignInMutation, useUser } from "@/lib/query";
+import { loginAtom } from "@/lib/atoms";
+import { useRecoilState } from "recoil";
 
-export default function Login({ open, handleClose }) {
+export default function Login() {
+  const [loginOpen, setLoginOpen] = useRecoilState(loginAtom);
   const user = useUser();
-  const isOpen = open && user ? false : open;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [tabItem, setTabItem] = useState(0);
@@ -54,7 +56,7 @@ export default function Login({ open, handleClose }) {
     }
   };
   return (
-    <Dialog open={isOpen ?? false} onClose={handleClose}>
+    <Dialog open={loginOpen && !user} onClose={() => setLoginOpen(false)}>
       <Paper
         elevation={2}
         component={"form"}

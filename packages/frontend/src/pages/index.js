@@ -1,5 +1,10 @@
-import Layout from "@/components/Layout";
+import { Hero } from "@/components/Hero";
+import Layout from "@/components/Layout/Layout";
 
 export default function Home() {
-  return <Layout></Layout>;
+  return (
+    <Layout>
+      <Hero />
+    </Layout>
+  );
 }

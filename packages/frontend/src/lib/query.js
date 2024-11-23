@@ -147,3 +147,7 @@ export const useSetPassword = ({ onError, onSuccess }) => {
     onSuccess,
   });
 };
+
+export const useSubscription = () => {
+  return [];
+};

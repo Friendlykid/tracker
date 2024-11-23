@@ -1,21 +1,12 @@
-import {
-  AppBar,
-  Box,
-  IconButton,
-  styled,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import Login from "./LoginDialog";
-import SwitchTheme from "./SwitchTheme";
-import { UserCircle } from "./UserCircle";
+import { Box, styled } from "@mui/material";
+import { useEffect } from "react";
+import Login from "../LoginDialog";
 import { useUser } from "@/lib/query";
 import { useRouter } from "next/router";
-import { Visibility } from "@mui/icons-material";
 import Head from "next/head";
+import { AppBar } from "./AppBar";
 
-export const MainStyle = styled("main")(({ theme }) => {
+const MainStyle = styled("main")(({ theme }) => {
   return {
     flexGrow: 1,
     paddingTop: 24,
@@ -33,7 +24,6 @@ export const MainStyle = styled("main")(({ theme }) => {
 });
 
 const Layout = ({ children, title }) => {
-  const [loginOpen, setLoginOpen] = useState(false);
   const router = useRouter();
   const user = useUser();
 
@@ -55,28 +45,7 @@ const Layout = ({ children, title }) => {
           minHeight: "100vh",
         }}
       >
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              sx={{ mr: 2 }}
-              onClick={() => {
-                if (router.asPath !== "/dashboard" && user) {
-                  router.push("/dashboard");
-                }
-              }}
-            >
-              <Visibility />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Appka
-            </Typography>
-            <SwitchTheme />
-            <UserCircle openLogin={() => setLoginOpen(true)} />
-          </Toolbar>
-        </AppBar>
+        <AppBar />
         <Head>
           <title>
             {title ? `Crypto adress watch - ${title}` : "Crypto adress watch"}
@@ -84,7 +53,7 @@ const Layout = ({ children, title }) => {
         </Head>
         <MainStyle>{children}</MainStyle>
       </Box>
-      <Login open={loginOpen} handleClose={() => setLoginOpen(false)} />
+      <Login />
     </>
   );
 };
