@@ -57,10 +57,7 @@ const CustomTooltip = ({ payload, label, active }) => {
     return (
       <Box>
         {payload.map((load, i) => {
-          console.log("here:", payload[0].value, payload);
-
-          const percentage =
-            i === 0 ? 0 : percChange(payload[0].value, load.value);
+          const percentage = percChange(data[0][load.name], load.value);
           return (
             <Typography key={`${load.value}-${i}`}>
               {`${load.name} : ${load.value} `}
@@ -85,13 +82,9 @@ const CustomTooltip = ({ payload, label, active }) => {
 };
 
 const HeroChart = () => {
-  console.log(new Date(new Date().setFullYear(2024, 1)));
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <LineChart
-        data={data}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      >
+      <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
         <YAxis />
