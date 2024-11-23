@@ -9,7 +9,6 @@ export const percChange = (a, b) => {
   } else {
     percent = -a * 100.0;
   }
-  console.log(a, b, percent);
 
-  return percent;
+  return Math.round((percent + Number.EPSILON) * 100) / 100;
 };
