@@ -13,8 +13,8 @@ const lightPalette = {
 
 const darkPalette = {
   mode: "dark",
-  primary: { main: "#F57C00" },
-  secondary: { main: "#757575" },
+  primary: { main: "#F57C00", light: "#FF9800", dark: "#F57C00" },
+  secondary: { main: "#607D8B", light: "#607D8B", dark: "#455A64" },
 };
 
 export const useCreateTheme = (mode) => {

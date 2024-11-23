@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout/Layout";
 import { useLastVisitedQuery, useUser } from "@/lib/query";
 export default function Home() {
   const { data: lastVisited } = useLastVisitedQuery();

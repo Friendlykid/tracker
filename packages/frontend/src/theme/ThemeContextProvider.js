@@ -1,10 +1,8 @@
 import { ThemeProvider, useMediaQuery } from "@mui/material";
-import { createContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useCreateTheme } from "./theme";
 import { useRecoilState } from "recoil";
 import { modeAtom } from "@/lib/atoms";
-
-export const ThemeContext = createContext(null);
 
 export const ThemeContextProvider = ({ children }) => {
   const [mode, setMode] = useRecoilState(modeAtom);

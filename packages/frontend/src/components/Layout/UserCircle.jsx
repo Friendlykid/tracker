@@ -39,7 +39,7 @@ export const UserCircle = ({ openLogin }) => {
 
   if (!user) {
     return (
-      <Button color="inherit" onClick={openLogin}>
+      <Button variant="contained" onClick={openLogin}>
         Login
       </Button>
     );
