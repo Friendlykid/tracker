@@ -6,7 +6,7 @@ import {
   Stack,
 } from "@mui/material";
 import { UserCircle } from "./UserCircle";
-import { Logo } from "./Logo";
+import { Logo } from "../Icons/Logo";
 import { useRouter } from "next/router";
 import { useUser } from "@/lib/query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
