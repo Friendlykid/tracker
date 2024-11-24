@@ -8,14 +8,15 @@ import { AppBar } from "./AppBar";
 import { useIsSmallScreen } from "./hooks";
 import { DrawerContent } from "./DrawerContent";
 
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 280;
 
 const MainStyle = styled("main")(({ theme }) => {
+  const router = useRouter();
   return {
     flexGrow: 1,
     paddingTop: 24,
     paddingBottom: 24,
-    width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    width: router.asPath === "/" ? "100%" : `calc(100% - ${DRAWER_WIDTH}px)`,
     [theme.breakpoints.up("xs")]: {
       paddingLeft: 25,
       paddingRight: 25,
@@ -25,7 +26,7 @@ const MainStyle = styled("main")(({ theme }) => {
       paddingBottom: 24,
     },
     [theme.breakpoints.up("sm")]: {
-      marginLeft: DRAWER_WIDTH,
+      marginLeft: router.asPath === "/" ? 0 : DRAWER_WIDTH,
     },
   };
 });
@@ -64,7 +65,7 @@ const Layout = ({ children, title }) => {
           }}
         />
 
-        {user.emailVerified && (
+        {user?.emailVerified && (
           <Drawer
             variant={isSmallScreen ? "temporary" : "permanent"}
             open={isSmallScreen ? isDrawerOpen : true}
