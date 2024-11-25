@@ -12,6 +12,7 @@ export const cacheTokens = async () => {
   if (response.ok) {
     const tokenList = await response.json();
     tokenList.tokens.forEach((token) => {
+      // eslint-disable-next-line no-unused-vars
       const { chainId, address, ...other } = token;
       cache.set(address, { ...other });
     });

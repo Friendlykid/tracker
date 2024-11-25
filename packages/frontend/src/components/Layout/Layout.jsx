@@ -1,4 +1,4 @@
-import { Box, Drawer, styled, Typography } from "@mui/material";
+import { Box, Drawer, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import Login from "../LoginDialog";
 import { useUser } from "@/lib/query";
@@ -20,6 +20,9 @@ const MainStyle = styled("main")(({ theme }) => {
     [theme.breakpoints.up("xs")]: {
       paddingLeft: 25,
       paddingRight: 25,
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
     },
     [theme.breakpoints.up("md")]: {
       paddingTop: 24,

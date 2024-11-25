@@ -8,7 +8,7 @@ const SwitchTheme = () => {
   const [mode, setMode] = useRecoilState(modeAtom);
 
   return (
-    <Stack alignItems="center" pl={1} direction="row" width="100%">
+    <Stack alignItems="center" pl={2} direction="row" width="100%">
       {mode === "light" ? <LightModeIcon /> : <DarkMode />}
       <Switch
         checked={mode === "dark"}
