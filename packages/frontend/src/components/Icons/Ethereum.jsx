@@ -1,12 +1,15 @@
+import { useTheme } from "@mui/material";
+
 export const Ethereum = ({ color, other }) => {
+  const theme = useTheme();
   return (
     <svg
-      fill={color ?? "currentColor"}
+      fill={theme.palette?.[color]?.main ?? "currentColor"}
       width={24}
       height={24}
       viewBox="0 0 32 32"
       xmlns="http://www.w3.org/2000/svg"
-      stroke={color ?? "currentColor"}
+      stroke={theme.palette?.[color]?.main ?? "currentColor"}
       strokeWidth={0.1}
       {...other}
     >

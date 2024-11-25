@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
-import { useRegisterUser, useSignInMutation, useUser } from "@/lib/query";
 import { loginAtom } from "@/lib/atoms";
 import { useRecoilState } from "recoil";
+import { useUser } from "@/lib/query";
+import { useRegisterUser, useSignInMutation } from "@/lib/mutations";
 
 export default function Login() {
   const [loginOpen, setLoginOpen] = useRecoilState(loginAtom);

@@ -10,7 +10,7 @@ export const addTokenBalances = async (addr) => {
 
   await Promise.all(
     tokenBalances.map(async ({ contractAddress, tokenBalance }) => {
-      const { logoURI, symbol, decimals } = await getTokenInfo(tokenAddress);
+      const { logoURI, symbol, decimals } = await getTokenInfo(contractAddress);
 
       batch.set(
         db

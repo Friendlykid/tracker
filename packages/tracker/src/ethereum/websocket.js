@@ -6,7 +6,6 @@ import { getTokenInfo } from "../config/cache.js";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { weiToEther } from "../utils/conversion.js";
-import { randomUUID } from "crypto";
 
 const TRANSFER_EVENT = keccak256("Transfer(address,address,uint256)");
 

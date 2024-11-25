@@ -52,7 +52,7 @@ const data = [
   },
 ];
 
-const CustomTooltip = ({ payload, label, active }) => {
+const CustomTooltip = ({ payload, active }) => {
   if (active && payload && payload.length) {
     return (
       <Box>

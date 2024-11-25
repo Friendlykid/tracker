@@ -13,5 +13,11 @@
     "packages/*"
   ],
   "author": "Jiri Kouba",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.12.0"
+  }
 }
