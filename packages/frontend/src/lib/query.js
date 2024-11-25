@@ -1,5 +1,8 @@
-import { auth } from "@/firebase/firebase";
+import { COLLECTIONS } from "@/firebase/constants";
+import { auth, db } from "@/firebase/firebase";
+import { getEthBlockHeight } from "@/firebase/functions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { collection, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
 
 export const useLastVisitedQuery = () => {
@@ -27,10 +30,6 @@ export const useUser = () => {
   return data;
 };
 
-export const useSubscription = () => {
-  return [];
-};
-
 export const useBtcBlockHeight = () => {
   return useQuery({
     queryKey: ["btcBlockHeight"],
@@ -45,16 +44,43 @@ export const useBtcBlockHeight = () => {
 export const useEthBlockHeight = () => {
   return useQuery({
     queryKey: ["ethBlockHeight"],
-    queryFn: async () => {
-      const response = await fetch("/api/ethBlockNumber");
-      console.log(response);
-      if (!response.ok) return false;
-
-      const json = await response.json();
-      console.log(json);
-      const height = json?.height;
-      return height;
-    },
+    queryFn: getEthBlockHeight,
     refetchInterval: 1 * 60 * 1000,
+  });
+};
+
+export const useBtcSubscriptions = () => {
+  const user = useUser();
+  return useQuery({
+    queryKey: ["btcSubscriptions"],
+    queryFn: async () => {
+      if (!user) return new Error("User not loaded");
+      const querySnapshot = await getDocs(
+        collection(db, COLLECTIONS.BTC_SUBSCRIPTIONS(user.uid))
+      );
+      const subs = [];
+      querySnapshot.forEach((doc) => {
+        subs.push({ addr: doc.id, ...doc.data() });
+      });
+      return subs;
+    },
+  });
+};
+
+export const useEthSubscriptions = () => {
+  const user = useUser();
+  return useQuery({
+    queryKey: ["ethSubscriptions"],
+    queryFn: async () => {
+      if (!user) return new Error("User not loaded");
+      const querySnapshot = await getDocs(
+        collection(db, COLLECTIONS.ETH_SUBSCRIPTIONS(user.uid))
+      );
+      const subs = [];
+      querySnapshot.forEach((doc) => {
+        subs.push({ addr: doc.id, ...doc.data() });
+      });
+      return subs;
+    },
   });
 };
