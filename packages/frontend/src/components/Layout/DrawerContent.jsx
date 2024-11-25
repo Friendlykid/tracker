@@ -5,6 +5,7 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
+  Divider,
 } from "@mui/material";
 import SwitchTheme from "../SwitchTheme";
 import { useRouter } from "next/router";
@@ -14,12 +15,19 @@ import { useCallback, useState } from "react";
 import { Ethereum } from "../Icons/Ethereum";
 import { useSearchParams } from "next/navigation";
 import { BITCOIN, ETHEREUM } from "@/lib/constants";
+import { useBtcSubscriptions, useEthSubscriptions } from "@/lib/query";
+import { SubscriptionList } from "./SubscriptionList";
 
 export const DrawerContent = () => {
-  const [subOpen, setSubOpen] = useState(false);
+  const [subOpen, setSubOpen] = useState(true);
+
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const { data: btcSubscriptions, isFetched: isBtcFetched } =
+    useBtcSubscriptions();
+  const { data: ethSubscriptions, isFetched: isEthFetched } =
+    useEthSubscriptions();
+  console.log(btcSubscriptions);
   const createQueryString = useCallback(
     (name, value) => {
       const params = new URLSearchParams(searchParams);
@@ -29,7 +37,6 @@ export const DrawerContent = () => {
     },
     [searchParams]
   );
-
   return (
     <Stack justifyContent="space-between" my={2} height="100%">
       <List
@@ -93,7 +100,25 @@ export const DrawerContent = () => {
           </List>
         </Collapse>
       </List>
-      <SwitchTheme />
+      <Stack>
+        <Divider />
+        <SubscriptionList
+          shouldCollapse={isBtcFetched ? btcSubscriptions > 3 : false}
+          Icon={Bitcoin}
+          subs={isBtcFetched ? btcSubscriptions : undefined}
+          title="Bitcoin Subscriptions"
+          path={"/dashboard/btc_wallet/"}
+        />
+        <Divider sx={{ mb: 4 }} />
+        <SubscriptionList
+          shouldCollapse={isEthFetched ? ethSubscriptions > 3 : false}
+          Icon={Ethereum}
+          subs={isEthFetched ? ethSubscriptions : undefined}
+          title="Ethereum Subscriptions"
+          path={"/dashboard/eth_wallet/"}
+        />
+        <SwitchTheme />
+      </Stack>
     </Stack>
   );
 };

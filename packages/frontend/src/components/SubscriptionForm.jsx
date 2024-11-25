@@ -29,12 +29,13 @@ const INVALID_ADDRESS_MESSAGE = "Address is not valid";
 const DUPLICATE_ADDRESS_MESSAGE = "You are already tracking this address";
 const EMPTY_ADDRESS_MESSAGE = "Should not be empty";
 
-export const SubscriptionForm = ({ isEdit = false }) => {
+export const SubscriptionForm = ({ isEdit = false, defaultAddr = "hello" }) => {
   const user = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [blockchain, setBlockchain] = useState(null);
-  const [address, setAddress] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState(defaultAddr);
   const [isEmail, setIsEmail] = useState(true);
   const [isErc20, setIsErc20] = useState(false);
   const [isDuplicate, setIsDuplicate] = useState(false);
@@ -48,7 +49,6 @@ export const SubscriptionForm = ({ isEdit = false }) => {
       setIsDuplicate(data);
     },
   });
-
   const { mutate: setSubscription } = useSubscribe({
     onSuccess: () => {
       enqueueSnackbar(
@@ -93,7 +93,7 @@ export const SubscriptionForm = ({ isEdit = false }) => {
     }
   }, [searchParams, blockchain, isEdit]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!address) {
       setIsAddressEmptyError(true);
       return;
@@ -103,7 +103,11 @@ export const SubscriptionForm = ({ isEdit = false }) => {
     const data = { blockchain, address };
     if (!isEdit) {
       data.blockHeight =
-        blockchain === BITCOIN ? btcBlockHeight : ethBlockHeight;
+        blockchain === BITCOIN
+          ? Number(btcBlockHeight)
+          : Number(ethBlockHeight);
+      data.name = name !== "" ? name : address;
+      data.alert = isEmail;
     }
     if (blockchain === ETHEREUM) {
       data.watch_tokens = isErc20;
@@ -131,6 +135,8 @@ export const SubscriptionForm = ({ isEdit = false }) => {
         variant="outlined"
         label='Name, e.g. "MyWallet" (optional)'
         name="walletName"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         slotProps={{ htmlInput: { autoComplete: "off" } }}
         sx={{ maxWidth: MAX_TEXT_FIELD_WIDTH }}
       />
