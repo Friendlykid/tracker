@@ -27,7 +27,6 @@ export const DrawerContent = () => {
     useBtcSubscriptions();
   const { data: ethSubscriptions, isFetched: isEthFetched } =
     useEthSubscriptions();
-  console.log(btcSubscriptions);
   const createQueryString = useCallback(
     (name, value) => {
       const params = new URLSearchParams(searchParams);
