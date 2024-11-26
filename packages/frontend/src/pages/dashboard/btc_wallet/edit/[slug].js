@@ -18,7 +18,7 @@ export default function BtcEdit() {
       enqueueSnackbar({ variant: "error", message: "Wrong input" });
       router.push("/");
     }
-  }, [subscription, isFetched]);
+  }, [subscription, isFetched, router]);
   if (!user || !isFetched || !subscription) return null;
   return (
     <Layout>
