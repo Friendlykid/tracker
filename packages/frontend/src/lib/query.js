@@ -2,8 +2,9 @@ import { COLLECTIONS } from "@/firebase/constants";
 import { auth, db } from "@/firebase/firebase";
 import { getEthBlockHeight } from "@/firebase/functions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
+import { BITCOIN } from "./constants";
 
 export const useLastVisitedQuery = () => {
   return useQuery({
@@ -83,4 +84,26 @@ export const useEthSubscriptions = () => {
       return subs;
     },
   });
+};
+
+export const useSubscription = (blockchain, address) => {
+  const user = useUser();
+  const query = useQuery({
+    queryKey: ["subscription", blockchain, address],
+    queryFn: async () => {
+      if (!blockchain || !address || !user) return false;
+      const docRef = doc(
+        db,
+        blockchain === BITCOIN
+          ? COLLECTIONS.BTC_SUBSCRIPTIONS(user.uid)
+          : COLLECTIONS.ETH_SUBSCRIPTIONS(user.uid),
+        address
+      );
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists) return false;
+      return docSnap.data();
+    },
+    enabled: !!blockchain && !!address && !!user,
+  });
+  return query;
 };

@@ -29,15 +29,22 @@ const INVALID_ADDRESS_MESSAGE = "Address is not valid";
 const DUPLICATE_ADDRESS_MESSAGE = "You are already tracking this address";
 const EMPTY_ADDRESS_MESSAGE = "Should not be empty";
 
-export const SubscriptionForm = ({ isEdit = false, defaultAddr = "hello" }) => {
+export const SubscriptionForm = ({
+  isEdit = false,
+  defaultAddr = "",
+  defaultblockchain = null,
+  defaultName = "",
+  defaultAlert = true,
+  defaultErc20 = false,
+}) => {
   const user = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [blockchain, setBlockchain] = useState(null);
-  const [name, setName] = useState("");
+  const [blockchain, setBlockchain] = useState(defaultblockchain);
+  const [name, setName] = useState(defaultName);
   const [address, setAddress] = useState(defaultAddr);
-  const [isEmail, setIsEmail] = useState(true);
-  const [isErc20, setIsErc20] = useState(false);
+  const [isEmail, setIsEmail] = useState(defaultAlert);
+  const [isErc20, setIsErc20] = useState(defaultErc20);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isAddressEmptyError, setIsAddressEmptyError] = useState(false);
   const { data: btcBlockHeight, isFetched: isBtcBlockHeight } =
@@ -49,6 +56,7 @@ export const SubscriptionForm = ({ isEdit = false, defaultAddr = "hello" }) => {
       setIsDuplicate(data);
     },
   });
+  console.log(address);
   const { mutate: setSubscription } = useSubscribe({
     onSuccess: () => {
       enqueueSnackbar(
@@ -127,8 +135,14 @@ export const SubscriptionForm = ({ isEdit = false, defaultAddr = "hello" }) => {
   if (!user) return;
   return (
     <Stack gap={3}>
-      <Typography variant="h4" component="h2">
-        Track new wallet
+      <Typography
+        variant="h4"
+        component="h2"
+        textOverflow="ellipsis"
+        overflow="hidden"
+        whiteSpace="nowrap"
+      >
+        {isEdit ? `Edit ${address}` : "Track new wallet"}
       </Typography>
       <Divider sx={{ mb: 8 }} />
       <TextField

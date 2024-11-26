@@ -4,7 +4,7 @@ import { cacheTokens } from "./config/cache.js";
 import { subscribeEthAddress } from "./ethereum/websocket.js";
 
 (async () => {
-  // await cacheTokens();
+  await cacheTokens();
   btcNewBlocks();
   updateBtcAddresses();
 })();

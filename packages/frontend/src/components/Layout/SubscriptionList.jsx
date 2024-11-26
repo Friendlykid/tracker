@@ -5,6 +5,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -21,19 +22,30 @@ export const SubscriptionList = ({
 
   if (subs.length === 0) return null;
   return (
-    <List>
-      <ListItemButton
-        onClick={() => {
-          setIsOpen;
-        }}
-      >
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText primary={title} sx={{ whiteSpace: "nowrap" }} />
-
-        {shouldCollapse && <>{isOpen ? <ExpandLess /> : <ExpandMore />}</>}
-      </ListItemButton>
+    <List
+      subheader={
+        <ListSubheader
+          onClick={() => {
+            if (shouldCollapse) setIsOpen((old) => !old);
+          }}
+          component="div"
+          id={`${title}-subheader`}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignContent: "center",
+            flexWrap: "wrap",
+            "& > *": { alignItems: "center" },
+          }}
+        >
+          <ListItemIcon>
+            <Icon />
+          </ListItemIcon>
+          <ListItemText primary={title} />
+          {shouldCollapse && <>{isOpen ? <ExpandLess /> : <ExpandMore />}</>}
+        </ListSubheader>
+      }
+    >
       <Collapse
         in={shouldCollapse ? isOpen : true}
         timeout="auto"
@@ -42,9 +54,9 @@ export const SubscriptionList = ({
         <List component="div" disablePadding>
           {subs.length > 0 &&
             subs.map((sub) => {
-              console.log(sub);
               return (
                 <ListItemButton
+                  selected={router.asPath.endsWith(sub.address)}
                   key={sub.address}
                   sx={{ pl: 4 }}
                   onClick={() => {
