@@ -10,7 +10,8 @@
 
 # testing
 /coverage
-packages/tracker/text.json
+packages/tracker/btcBlock.json
+packages/tracker/ethLogs.json
 
 # next.js
 /packages/frontend/.next/

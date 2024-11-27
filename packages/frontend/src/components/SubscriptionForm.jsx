@@ -63,7 +63,7 @@ export const SubscriptionForm = ({
         isEdit ? "Subscription changed" : "Subscription Created",
         { variant: "success" }
       );
-      router.push("/dashboard/wallet/" + address);
+      router.push(`/dashboard/${blockchain}_wallet/` + address);
     },
   });
 

@@ -2,6 +2,7 @@ import { alchemy } from "../config/alchemy.js";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { addTokenBalances } from "./addTokenBalances.js";
+import { getEthAddressBalance } from "./getEthereumInfo.js";
 import {
   subscribeEthAddress,
   subscribeEthERC20Address,
