@@ -7,7 +7,7 @@ export default function Verify() {
   const user = useUser();
 
   return (
-    <Layout>
+    <Layout title="Verification">
       {!user ? (
         <Skeleton variant="rectangular" width={300} />
       ) : !user?.verifiedEmail ? (

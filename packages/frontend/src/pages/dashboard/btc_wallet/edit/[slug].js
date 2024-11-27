@@ -21,7 +21,7 @@ export default function BtcEdit() {
   }, [subscription, isFetched, router]);
   if (!user || !isFetched || !subscription) return null;
   return (
-    <Layout>
+    <Layout title="Edit">
       {isFetched && (
         <SubscriptionForm
           isEdit

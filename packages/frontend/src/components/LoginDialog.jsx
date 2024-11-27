@@ -16,6 +16,7 @@ import { loginAtom } from "@/lib/atoms";
 import { useRecoilState } from "recoil";
 import { useUser } from "@/lib/query";
 import { useRegisterUser, useSignInMutation } from "@/lib/mutations";
+import { enqueueSnackbar } from "notistack";
 
 export default function Login() {
   const [loginOpen, setLoginOpen] = useRecoilState(loginAtom);
@@ -43,7 +44,7 @@ export default function Login() {
       try {
         signIn({ provider: "email", email, password });
       } catch (error) {
-        console.log(error);
+        enqueueSnackbar({ variant: "error", message: "Something went wrong" });
         if (String(error).includes("auth/missing-password")) {
           setPasswordError(true);
         }

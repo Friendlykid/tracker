@@ -44,8 +44,6 @@ const Layout = ({ children, title }) => {
       router.push("/");
     } else if (user && !user.emailVerified && router.asPath !== "/verify") {
       router.push("/verify");
-    } else if (user && router.asPath === "/") {
-      router.push("/dashboard");
     }
   }, [user, router]);
   return (
@@ -68,7 +66,7 @@ const Layout = ({ children, title }) => {
           }}
         />
 
-        {user?.emailVerified && (
+        {user?.emailVerified && router.asPath !== "/" && (
           <Drawer
             variant={isSmallScreen ? "temporary" : "permanent"}
             open={isSmallScreen ? isDrawerOpen : true}

@@ -56,7 +56,6 @@ export const SubscriptionForm = ({
       setIsDuplicate(data);
     },
   });
-  console.log(address);
   const { mutate: setSubscription } = useSubscribe({
     onSuccess: () => {
       enqueueSnackbar(
