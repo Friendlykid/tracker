@@ -9,7 +9,7 @@ const getBtcAmount = (addr, tx) => {
   if (inputAddresses.every((input) => !input || input !== addr)) {
     // address recieves BTC from someone or its a block reward
     return satsToBtc(
-      tx.outs
+      tx.out
         .filter((out) => out.addr === addr)
         .map((out) => out.value)
         .reduce((acc, sats) => acc + sats, 0)
