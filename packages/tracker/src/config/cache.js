@@ -1,32 +1,36 @@
 import NodeCache from "node-cache";
 import { getLastBtcBlockHeight } from "../bitcoin/getBlockchainInfo.js";
-import { alchemy } from "./alchemy.js";
+import { readFile } from "fs/promises";
+import path from "path";
 
 const cache = new NodeCache({ stdTTL: 0 });
 const btcTxCache = new NodeCache();
 
 export const cacheTokens = async () => {
-  const response = await fetch(
-    "https://wispy-bird-88a7.uniswap.workers.dev/?url=http://tokens.1inch.eth.link"
+  const oneInchList = JSON.parse(
+    await readFile(path.join(process.cwd(), "lists/tokenList1Inch.json"))
   );
-  if (response.ok) {
-    const tokenList = await response.json();
-    tokenList.tokens.forEach((token) => {
-      // eslint-disable-next-line no-unused-vars
-      const { chainId, address, ...other } = token;
-      cache.set(address, { ...other });
-    });
-  }
+  const coingeckoList = JSON.parse(
+    await readFile(path.join(process.cwd(), "lists/tokenListCoingecko.json"))
+  );
+  oneInchList.tokens.forEach((token) => {
+    // eslint-disable-next-line no-unused-vars
+    const { chainId, address, ...other } = token;
+    cache.set(address, { ...other });
+  });
+  coingeckoList.tokens.forEach((token) => {
+    // eslint-disable-next-line no-unused-vars
+    const { chainId, address, ...other } = token;
+    if (cache.has(address)) return;
+    cache.set(address, { ...other });
+  });
 };
 
-export const getTokenInfo = async (addr) => {
+export const getTokenInfo = (addr) => {
+  if (!cache.has(addr)) return false;
   if (cache.has(addr)) {
     return cache.get(addr);
   }
-  const { logo, ...other } = await alchemy.core.getTokenMetadata(addr);
-  const info = { ...other, logoURI: logo };
-  cache.set(addr, info);
-  return info;
 };
 
 export const getBtcBlockHeight = async () => {

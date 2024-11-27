@@ -3,8 +3,8 @@ import { alchemy } from "../config/alchemy.js";
 /**
  *
  * @param {string} addr
- * @returns {Promise<BigInt>}
+ * @returns {Promise<String>}
  */
 export const getEthAddressBalance = async (addr) => {
-  return await alchemy.core.getBalance(addr, "latest");
+  return (await alchemy.core.getBalance(addr, "latest")).toString();
 };
