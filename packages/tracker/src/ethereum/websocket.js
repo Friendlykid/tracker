@@ -6,12 +6,15 @@ import { getTokenInfo } from "../config/cache.js";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { weiToEther } from "../utils/conversion.js";
+import { mailToUsers } from "../email/sendEmails.js";
 
 const TRANSFER_EVENT = keccak256("Transfer(address,address,uint256)");
 
 const sendERC20Transaction =
   (operator = "", addr) =>
   async (tx) => {
+    await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails_erc_20");
+
     const senderAddr = decodeAddress(tx.topics[1]);
     const amount = BigNumber.from(tx.data);
     const tokenAddress = tx.address;
@@ -61,6 +64,8 @@ export const subscribeEthAddress = (addr) => {
         // transaction is not transfering ether, can be skipped
         return;
       }
+      await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails");
+
       await db.doc(COLLECTIONS.ETH_TXS(addr, tx.transactionHash)).set({
         amount: `${tx.transaction.to !== addr ? "-" : ""}${weiToEther(
           tx.transaction.value
