@@ -1,6 +1,5 @@
 import { COLLECTIONS } from "@/firebase/constants";
 import { auth, db } from "@/firebase/firebase";
-import { getEthBlockHeight } from "@/firebase/functions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
@@ -45,7 +44,10 @@ export const useBtcBlockHeight = () => {
 export const useEthBlockHeight = () => {
   return useQuery({
     queryKey: ["ethBlockHeight"],
-    queryFn: getEthBlockHeight,
+    queryFn: async () => {
+      const response = await fetch("/api/ethBlockNumber");
+      if (response.ok) return await response.text();
+    },
     refetchInterval: 1 * 60 * 1000,
   });
 };

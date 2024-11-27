@@ -1,9 +1,6 @@
-import {
-  getUncofirmedBtcTxHashes,
-  removeBtcTxsFromCache,
-} from "../config/cache.js";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
+import { sendEmails } from "../email/sendEmails.js";
 import { satsToBtc } from "../utils/conversion.js";
 import { getBtcBlock } from "./getBlockchainInfo.js";
 
@@ -47,21 +44,39 @@ const filterTx = (tx) => {
   };
 };
 
-export const onNewBlock = async (hash) => {
-  const txHashes = getUncofirmedBtcTxHashes();
-  if (!txHashes || txHashes.length === 0) return;
-  const block = await getBtcBlock(hash);
-  const txsToAdd = block.tx.filter((tx) => txHashes.includes(tx.hash));
-  if (txsToAdd.length === 0) return;
-
-  const addresses = removeBtcTxsFromCache(txsToAdd.map((tx) => tx.hash));
-  Promise.all(
-    addresses.map(async (addr, i) => {
-      const amount = getBtcAmount(addr, txsToAdd[i]);
-      await db
-        .collection(COLLECTIONS.BTC_ADDRESSES)
-        .doc(txsToAdd[i].hash)
-        .set({ amount, ...filterTx(txsToAdd[i]) });
+const addAddressesWithTransactions = async (addresses, transactions) => {
+  return Promise.all(
+    addresses.map(async (address) => {
+      const matchingTransactions = transactions.filter(
+        (transaction) =>
+          transaction.inputs.some((input) => input.addr === address.addr) ||
+          transaction.out.some((output) => output.addr === address.addr)
+      );
+      if (matchingTransactions.length === 0) return;
+      await Promise.all(
+        matchingTransactions.map(async (tx) => {
+          if (address.emails && address.emails.length > 0) {
+            sendEmails(address.emails);
+          }
+          const amount = getBtcAmount(address.addr, tx);
+          await db
+            .collection(COLLECTIONS.BTC_ADDRESSES)
+            .doc(tx.hash)
+            .set({ amount, ...filterTx(tx) });
+        })
+      );
     })
   );
+};
+
+export const onNewBlock = async (hash) => {
+  const btcAddrRef = db.collection(COLLECTIONS.BTC_ADDRESSES);
+  const snapshot = await btcAddrRef.get();
+  const addresses = [];
+  snapshot.forEach((doc) => {
+    addresses.push({ addr: doc.id, ...doc.data() });
+  });
+
+  const block = await getBtcBlock(hash);
+  await addAddressesWithTransactions(addresses, block.tx);
 };

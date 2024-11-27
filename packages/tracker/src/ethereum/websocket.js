@@ -51,17 +51,17 @@ export const subscribeEthAddress = (addr) => {
       includeRemoved: true,
       hashesOnly: false,
     },
-    (tx) => {
+    async (tx) => {
       if (tx.removed) {
         // transaction got removed, chain has been reorganized
-        db.doc(COLLECTIONS.ETH_TXS(addr, tx.transaction.hash));
+        db.doc(COLLECTIONS.ETH_TXS(addr, tx.transaction.hash)).delete();
         return;
       }
       if (tx.transaction.value === "0x0") {
         // transaction is not transfering ether, can be skipped
         return;
       }
-      db.doc(COLLECTIONS.ETH_TXS(addr, tx.transactionHash)).set({
+      await db.doc(COLLECTIONS.ETH_TXS(addr, tx.transactionHash)).set({
         amount: `${tx.transaction.to !== addr ? "-" : ""}${weiToEther(
           tx.transaction.value
         )}`,

@@ -19,30 +19,3 @@ export const btcNewBlocks = () => {
     close: btcNewBlocks,
   });
 };
-
-export const subscribeBtcAddress = (addr) => {
-  wsTemplate({
-    open: {
-      op: "addr_sub",
-      addr,
-    },
-    message: (block) => {
-      console.log("Received message:", block);
-    },
-    error: (error) => {
-      console.error("WebSocket error:", error);
-    },
-    close: () => {
-      subscribeBtcAddress(addr); // Reconnect on close
-    },
-  });
-};
-
-export const unsubscribeBtcAddress = (addr) => {
-  wsTemplate({
-    open: {
-      op: "addr_unsub",
-      addr,
-    },
-  });
-};
