@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }) {
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <SnackbarProvider>
+        <SnackbarProvider autoHideDuration={5000}>
           <ThemeContextProvider>
             <CssBaseline />
             <Component {...pageProps}></Component>

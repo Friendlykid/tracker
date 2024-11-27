@@ -29,8 +29,7 @@ export default function Settings() {
     onError: () => setOriginalError(true),
   });
   const { mutate: updatePassword } = useSetPassword({
-    onError: (e) => {
-      console.log(e);
+    onError: () => {
       enqueueSnackbar("Something went wrong", { variant: "error" });
     },
     onSuccess: () => {
@@ -58,7 +57,7 @@ export default function Settings() {
 
   if (!user) return;
   return (
-    <Layout>
+    <Layout title="Settings">
       <Stack gap={10}>
         {user.providerData[0].providerId === "password" && (
           <form style={{ maxWidth: 400 }} onSubmit={handleChangePass}>

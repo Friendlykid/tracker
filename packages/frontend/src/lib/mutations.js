@@ -61,7 +61,7 @@ export const useSignInMutation = () => {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(["user"], () => data);
-      router.push("/dashboard");
+      router.push("/dashboard/new");
     },
   });
 };
@@ -90,7 +90,7 @@ export const useRegisterUser = () => {
     onSuccess: (data) => {
       // Update user for useUser hook
       queryClient.setQueryData(["user"], () => data);
-      router.push("/dashboard");
+      router.push("/dashboard/new");
     },
   });
 };
