@@ -11,17 +11,17 @@ import { mailToUsers } from "../email/sendEmails.js";
 const TRANSFER_EVENT = keccak256("Transfer(address,address,uint256)");
 
 const sendERC20Transaction =
-  (operator = "", addr) =>
+  (addr, operator = "") =>
   async (tx) => {
     await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails_erc_20");
 
     const senderAddr = decodeAddress(tx.topics[1]);
     const amount = BigNumber.from(tx.data);
     const tokenAddress = tx.address;
-    const { name, logoURI, symbol, decimals } = await getTokenInfo(
-      tokenAddress
-    );
-    const tokenAmount = amount.div(decimals);
+    const tokenInfo = await getTokenInfo(tokenAddress);
+    const tokenAmount = tokenInfo
+      ? amount.div(tokenInfo.decimals).toString()
+      : amount;
     db.doc(
       COLLECTIONS.ETH_TXS(addr, `${tx.transactionHash}-${Number(tx.logIndex)}`)
     ).set({
@@ -31,9 +31,13 @@ const sendERC20Transaction =
       blockNumber: tx.blockNumber,
       blockHash: tx.blockHash,
       contractAddress: tx.address,
-      tokenName: name,
-      logoURI: logoURI,
-      symbol: symbol,
+      ...(tokenInfo
+        ? {
+            tokenName: tokenInfo.name,
+            logoURI: tokenInfo.logoURI,
+            symbol: tokenInfo.symbol,
+          }
+        : {}),
     });
   };
 
@@ -89,7 +93,7 @@ export const subscribeEthERC20Address = (addr = []) => {
       topics: [TRANSFER_EVENT, encodeAddress(addr), null],
       hashesOnly: false,
     },
-    sendERC20Transaction("-", addr)
+    sendERC20Transaction(addr, "-")
   );
 
   //address recieves token
@@ -98,7 +102,7 @@ export const subscribeEthERC20Address = (addr = []) => {
       topics: [TRANSFER_EVENT, null, encodeAddress(addr)],
       hashesOnly: false,
     },
-    sendERC20Transaction("", addr)
+    sendERC20Transaction(addr)
   );
 };
 

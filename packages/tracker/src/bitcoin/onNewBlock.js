@@ -15,14 +15,12 @@ const getBtcAmount = (addr, tx) => {
         .reduce((acc, sats) => acc + sats, 0)
     );
   }
-  return (
-    satsToBtc(
-      tx.inputs
-        .filter((input) => input.addr === addr)
-        .map((input) => input.value)
-        .reduce((acc, sats) => sats + acc, 0)
-    ) * -1
-  );
+  return `-${satsToBtc(
+    tx.inputs
+      .filter((input) => input.addr === addr)
+      .map((input) => input.value)
+      .reduce((acc, sats) => sats + acc, 0)
+  )}`;
 };
 
 const filterTx = (tx) => {

@@ -17,13 +17,17 @@ export const updateEthAddresses = async () => {
       if (change.type === "added") {
         console.log("New eth address added:", change.doc.id);
         try {
-          const blockNumber = await alchemy.core.getBlockNumber();
-          const amount = await getEthAddressBalance(change.doc.id);
+          // could be already set up
+          if (!change.doc.data()?.amount) {
+            const blockNumber = await alchemy.core.getBlockNumber();
+            const amount = await getEthAddressBalance(change.doc.id);
 
-          // set initial info
-          await addrRef
-            .doc(change.doc.id)
-            .update({ initial_block_number: blockNumber, amount });
+            // set initial info
+            await addrRef
+              .doc(change.doc.id)
+              .update({ initial_block_number: blockNumber, amount });
+          }
+
           // listen for new transactions
           subscribeEthAddress(change.doc.id);
           if (change.doc.data().erc_20_counter !== 0) {
