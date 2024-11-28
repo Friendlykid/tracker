@@ -70,7 +70,7 @@ export const subscribeEthAddress = (addr) => {
       }
       await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails");
 
-      await db.doc(COLLECTIONS.ETH_TXS(addr, tx.transactionHash)).set({
+      await db.doc(COLLECTIONS.ETH_TXS(addr, tx.transaction.hash)).set({
         amount: `${tx.transaction.to !== addr ? "-" : ""}${weiToEther(
           tx.transaction.value
         )}`,
