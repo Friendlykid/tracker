@@ -7,6 +7,7 @@ import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { weiToEther } from "../utils/conversion.js";
 import { mailToUsers } from "../email/sendEmails.js";
+import { Timestamp } from "firebase-admin/firestore";
 
 const TRANSFER_EVENT = keccak256("Transfer(address,address,uint256)");
 
@@ -31,6 +32,7 @@ const sendERC20Transaction =
       blockNumber: tx.blockNumber,
       blockHash: tx.blockHash,
       contractAddress: tx.address,
+      time: Timestamp.fromDate(new Date()),
       ...(tokenInfo
         ? {
             tokenName: tokenInfo.name,
@@ -69,7 +71,6 @@ export const subscribeEthAddress = (addr) => {
         return;
       }
       await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails");
-
       await db.doc(COLLECTIONS.ETH_TXS(addr, tx.transaction.hash)).set({
         amount: `${tx.transaction.to !== addr ? "-" : ""}${weiToEther(
           tx.transaction.value
@@ -78,6 +79,7 @@ export const subscribeEthAddress = (addr) => {
         to: tx.transaction.to,
         blockNumber: tx.transaction.blockNumber,
         blockHash: tx.transaction.blockHash,
+        time: Timestamp.fromDate(new Date()),
         logoURI:
           "https://seeklogo.com/images/E/ethereum-eth-logo-CF9DCCA696-seeklogo.com.png",
         symbol: "ETH",

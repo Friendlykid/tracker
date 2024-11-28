@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase-admin/firestore";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { sendEmails } from "../email/sendEmails.js";
@@ -44,7 +45,7 @@ const filterTx = (tx) => {
   };
 };
 
-const addAddressesWithTransactions = async (addresses, transactions) => {
+const addAddressesWithTransactions = async (addresses, transactions, time) => {
   return Promise.all(
     addresses.map(async (address) => {
       const matchingTransactions = transactions.filter(
@@ -59,9 +60,13 @@ const addAddressesWithTransactions = async (addresses, transactions) => {
             sendEmails(address.emails);
           }
           const amount = getBtcAmount(address.addr, tx);
+          console.log(
+            "adding btc tx to",
+            COLLECTIONS.BTC_TXS(address.addr, tx.hash)
+          );
           await db
             .doc(COLLECTIONS.BTC_TXS(address.addr, tx.hash))
-            .set({ amount, ...filterTx(tx) });
+            .set({ amount, time, ...filterTx(tx) });
         })
       );
     })
@@ -77,5 +82,6 @@ export const onNewBlock = async (hash) => {
   });
 
   const block = await getBtcBlock(hash);
-  await addAddressesWithTransactions(addresses, block.tx);
+  const time = Timestamp.fromDate(new Date(block.time));
+  await addAddressesWithTransactions(addresses, block.tx, time);
 };
