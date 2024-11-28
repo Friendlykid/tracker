@@ -25,7 +25,9 @@ const getBtcAmount = (addr, tx) => {
 
 const filterTx = (tx) => {
   const inputs = tx.inputs.reduce((acc, input) => {
-    acc[input?.addr ?? "block_reward"] = satsToBtc(input.prev_out.value);
+    acc[input.prev_out?.addr ?? "block_reward"] = satsToBtc(
+      input.prev_out.value
+    );
     return acc;
   }, {});
 
