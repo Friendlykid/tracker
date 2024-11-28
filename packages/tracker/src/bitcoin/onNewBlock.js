@@ -58,8 +58,7 @@ const addAddressesWithTransactions = async (addresses, transactions) => {
           }
           const amount = getBtcAmount(address.addr, tx);
           await db
-            .collection(COLLECTIONS.BTC_ADDRESSES)
-            .doc(tx.hash)
+            .doc(COLLECTIONS.BTC_TXS(address.addr, tx.hash))
             .set({ amount, ...filterTx(tx) });
         })
       );
