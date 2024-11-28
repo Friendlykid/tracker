@@ -1,17 +1,3 @@
-import { satsToBtc } from "../utils/conversion.js";
-
-export const getAddressBalance = async (addr) => {
-  const response = await fetch(
-    `https://blockchain.info/balance?active=${addr}`
-  );
-  if (response.ok) {
-    const data = await response.json();
-    return satsToBtc(data[addr].final_balance);
-  } else {
-    return getAddressBalance(addr);
-  }
-};
-
 export const getLastBtcBlockHeight = async () => {
   const response = await fetch(`https://blockchain.info/latestblock`);
   if (response.ok) {
