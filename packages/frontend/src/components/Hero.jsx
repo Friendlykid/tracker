@@ -1,7 +1,9 @@
 import { loginAtom } from "@/lib/atoms";
 import { percChange } from "@/lib/percentage";
+import { useUser } from "@/lib/query";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { blue, deepOrange } from "@mui/material/colors";
+import { useRouter } from "next/router";
 import {
   CartesianGrid,
   Legend,
@@ -108,6 +110,8 @@ const HeroChart = () => {
 };
 export const Hero = () => {
   const setLogin = useSetRecoilState(loginAtom);
+  const user = useUser();
+  const router = useRouter();
   return (
     <Box justifyItems="center" alignItems="center">
       <Stack gap={4} alignItems="center">
@@ -129,7 +133,13 @@ export const Hero = () => {
             <Button
               variant="contained"
               sx={{ maxWidth: 200 }}
-              onClick={() => setLogin(true)}
+              onClick={() => {
+                if (user) {
+                  router.push("/dashboard/new");
+                } else {
+                  setLogin(true);
+                }
+              }}
             >
               Get Started
             </Button>
