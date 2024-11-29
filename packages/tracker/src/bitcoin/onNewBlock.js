@@ -6,34 +6,37 @@ import { satsToBtc } from "../utils/conversion.js";
 import { getBtcBlock } from "./getBlockchainInfo.js";
 
 const getBtcAmount = (addr, tx) => {
-  const inputAddresses = tx.inputs.map((input) => input?.addr);
+  const inputAddresses = tx.inputs
+    .map((input) => input?.prev_out?.addr)
+    .filter(Boolean);
   if (inputAddresses.every((input) => !input || input !== addr)) {
     // address recieves BTC from someone or its a block reward
     return satsToBtc(
       tx.out
         .filter((out) => out.addr === addr)
         .map((out) => out.value)
-        .reduce((acc, sats) => acc + sats, 0)
+        .reduce((acc, sats) => acc + BigInt(sats), 0n)
     );
   }
-  return `-${satsToBtc(
+  const amount = satsToBtc(
     tx.inputs
       .filter((input) => input.addr === addr)
       .map((input) => input.value)
-      .reduce((acc, sats) => sats + acc, 0)
-  )}`;
+      .reduce((acc, sats) => sats + BigInt(acc), 0n)
+  );
+  return `${amount !== "0" ? "-" : ""}${amount}`;
 };
 
 const filterTx = (tx) => {
   const inputs = tx.inputs.reduce((acc, input) => {
     acc[input.prev_out?.addr ?? "block_reward"] = satsToBtc(
-      input.prev_out.value
+      BigInt(input.prev_out.value)
     );
     return acc;
   }, {});
 
   const outs = tx.out.reduce((acc, out) => {
-    acc[out?.addr ?? "block_reward"] = satsToBtc(out.value);
+    acc[out?.addr ?? "block_reward"] = satsToBtc(BigInt(out.value));
     return acc;
   }, {});
 
@@ -64,9 +67,10 @@ const addAddressesWithTransactions = async (addresses, transactions, time) => {
             "adding btc tx to",
             COLLECTIONS.BTC_TXS(address.addr, tx.hash)
           );
+          const filteredTx = filterTx(tx);
           await db
             .doc(COLLECTIONS.BTC_TXS(address.addr, tx.hash))
-            .set({ amount, time, ...filterTx(tx) });
+            .set({ amount, time, ...filteredTx });
         })
       );
     })

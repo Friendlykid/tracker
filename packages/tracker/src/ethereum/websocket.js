@@ -70,7 +70,6 @@ export const subscribeEthAddress = (addr) => {
         // transaction is not transfering ether, can be skipped
         return;
       }
-      await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails");
       await db.doc(COLLECTIONS.ETH_TXS(addr, tx.transaction.hash)).set({
         amount: `${tx.transaction.to !== addr ? "-" : ""}${weiToEther(
           tx.transaction.value
@@ -84,6 +83,7 @@ export const subscribeEthAddress = (addr) => {
           "https://seeklogo.com/images/E/ethereum-eth-logo-CF9DCCA696-seeklogo.com.png",
         symbol: "ETH",
       });
+      await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails");
     }
   );
 };
