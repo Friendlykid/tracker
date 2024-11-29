@@ -18,7 +18,7 @@ export const sendEmails = async (emails = []) => {
     });
     return response;
   } catch (e) {
-    console.log("Sending emails failed\n", e);
+    console.error("Sending emails failed\n", e);
     return;
   }
 };
