@@ -88,6 +88,6 @@ export const onNewBlock = async (hash) => {
   });
 
   const block = await getBtcBlock(hash);
-  const time = Timestamp.fromDate(new Date(block.time));
+  const time = Timestamp.fromDate(new Date(block.time * 1000));
   await addAddressesWithTransactions(addresses, block.tx, time);
 };
