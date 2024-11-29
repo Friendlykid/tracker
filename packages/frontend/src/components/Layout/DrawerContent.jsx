@@ -5,13 +5,12 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  Divider,
 } from "@mui/material";
 import SwitchTheme from "../SwitchTheme";
 import { useRouter } from "next/router";
 import { ExpandLess, ExpandMore, Add } from "@mui/icons-material";
 import { Bitcoin } from "../Icons/Bitcoin";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Ethereum } from "../Icons/Ethereum";
 import { useSearchParams } from "next/navigation";
 import { BITCOIN, ETHEREUM } from "@/lib/constants";
@@ -35,6 +34,14 @@ export const DrawerContent = () => {
       return params.toString();
     },
     [searchParams]
+  );
+  const shouldBtcCollapse = useMemo(
+    () => (isBtcFetched ? btcSubscriptions.length > 3 : false),
+    [isBtcFetched, btcSubscriptions]
+  );
+  const shouldEthCollapse = useMemo(
+    () => (isEthFetched ? ethSubscriptions.length > 3 : false),
+    [isEthFetched, ethSubscriptions]
   );
   return (
     <Stack justifyContent="space-between" my={2} height="100%">
@@ -94,30 +101,31 @@ export const DrawerContent = () => {
               <ListItemIcon>
                 <Ethereum />
               </ListItemIcon>
-              <ListItemText primary="Track Ethereum wallet" />
+              <ListItemText
+                sx={{ whiteSpace: "nowrap" }}
+                primary="Track Ethereum wallet"
+              />
             </ListItemButton>
           </List>
         </Collapse>
       </List>
       <Stack>
-        <Divider />
         <SubscriptionList
-          shouldCollapse={isBtcFetched ? btcSubscriptions > 3 : false}
+          shouldCollapse={shouldBtcCollapse}
           Icon={Bitcoin}
           subs={isBtcFetched ? btcSubscriptions : undefined}
           title="Bitcoin Subscriptions"
           path={"/dashboard/btc_wallet/"}
         />
-        <Divider sx={{ mb: 4 }} />
         <SubscriptionList
-          shouldCollapse={isEthFetched ? ethSubscriptions > 3 : false}
+          shouldCollapse={shouldEthCollapse}
           Icon={Ethereum}
           subs={isEthFetched ? ethSubscriptions : undefined}
           title="Ethereum Subscriptions"
           path={"/dashboard/eth_wallet/"}
         />
-        <SwitchTheme />
       </Stack>
+      <SwitchTheme />
     </Stack>
   );
 };

@@ -50,6 +50,7 @@ export const useAddress = () => {
       const baseData = {
         initValue: rootData.amount,
         address,
+        time: rootData.time,
         name: (coll === COLLECTIONS.BTC_ADDRESSES
           ? btcSubs.find((addr) => addr.addr === address)
           : ethSubs.find((addr) => addr.addr === address)
