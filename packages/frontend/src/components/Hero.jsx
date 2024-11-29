@@ -6,13 +6,10 @@ import { blue, deepOrange } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import {
   CartesianGrid,
-  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
   Tooltip,
-  XAxis,
-  YAxis,
 } from "recharts";
 import { useSetRecoilState } from "recoil";
 
@@ -88,10 +85,8 @@ const HeroChart = () => {
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
+
         <Tooltip content={CustomTooltip} />
-        <Legend />
         <Line
           strokeWidth={2}
           type="monotone"
@@ -118,7 +113,10 @@ export const Hero = () => {
         <Paper elevation={4} sx={{ maxWidth: 700 }}>
           <Stack spacing={4} p={2} alignItems="center" justifyContent="center">
             <Typography variant="h3" textAlign="center">
-              Track and{" "}
+              <Typography variant="inherit" color="primary" component="span">
+                Track
+              </Typography>{" "}
+              and{" "}
               <Typography variant="inherit" color="primary" component="span">
                 Visualize
               </Typography>{" "}

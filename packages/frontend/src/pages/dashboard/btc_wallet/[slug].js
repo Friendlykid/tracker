@@ -1,6 +1,8 @@
+import { Chart } from "@/components/Chart";
 import Layout from "@/components/Layout/Layout";
 import { WalletSkeleton } from "@/components/WalletSkeleton";
-import { useAddress, useUser } from "@/lib/query";
+import { useUser } from "@/lib/query";
+import { useAddress } from "@/lib/useAddressQuery";
 import { Edit } from "@mui/icons-material";
 import {
   Button,
@@ -19,19 +21,18 @@ import {
 export default function BtcWallet() {
   const user = useUser();
   const { data, isFetched } = useAddress();
-  if (isFetched) console.log(data);
   if (!user) return null;
-  console.log(data);
-
   return (
     <Layout title="Btc Wallet">
       {!isFetched ? (
         <WalletSkeleton />
       ) : (
-        <Stack>
+        <Stack gap={2}>
           <Typography variant="h2">{data.name}</Typography>
           {data.name !== data.address && (
-            <Typography variant="h4">{data.address}</Typography>
+            <Typography variant="h4" textOverflow="ellipsis" overflow="hidden">
+              {data.address}
+            </Typography>
           )}
           <Divider />
           <Stack direction="row" justifyContent="space-between">
@@ -39,7 +40,7 @@ export default function BtcWallet() {
             <Button disabled>Delete subscription</Button>
           </Stack>
 
-          {/*Chart*/}
+          <Chart />
 
           <Typography variant="h4">Transactions</Typography>
           <TableContainer component={Paper}>
@@ -56,7 +57,7 @@ export default function BtcWallet() {
                 {!data?.txs || data?.txs?.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>
-                      <Typography>No new transactions</Typography>
+                      <Typography>No transactions recorded yet</Typography>
                     </TableCell>
                   </TableRow>
                 ) : (

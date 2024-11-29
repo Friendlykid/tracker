@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase-admin/firestore";
 import { alchemy } from "../config/alchemy.js";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
@@ -25,7 +26,11 @@ export const updateEthAddresses = async () => {
             // set initial info
             await addrRef
               .doc(change.doc.id)
-              .update({ initial_block_number: blockNumber, amount });
+              .update({
+                initial_block_number: blockNumber,
+                amount,
+                time: Timestamp.fromDate(new Date()),
+              });
           }
 
           // listen for new transactions
