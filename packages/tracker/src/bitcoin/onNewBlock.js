@@ -5,7 +5,7 @@ import { sendEmails } from "../email/sendEmails.js";
 import { satsToBtc } from "../utils/conversion.js";
 import { getBtcBlock } from "./getBlockchainInfo.js";
 
-const getBtcAmount = (addr, tx) => {
+export const getBtcAmount = (addr, tx) => {
   const inputAddresses = tx.inputs
     .map((input) => input?.prev_out?.addr)
     .filter(Boolean);
@@ -20,9 +20,11 @@ const getBtcAmount = (addr, tx) => {
   }
   const amount = satsToBtc(
     tx.inputs
-      .filter((input) => input.addr === addr)
-      .map((input) => input.value)
-      .reduce((acc, sats) => sats + BigInt(acc), 0n)
+      .filter((input) => input.prev_out.addr === addr)
+      .map((input) => input.prev_out.value)
+      .reduce((acc, sats) => {
+        return BigInt(sats) + acc;
+      }, 0n)
   );
   return `${amount !== "0" ? "-" : ""}${amount}`;
 };
