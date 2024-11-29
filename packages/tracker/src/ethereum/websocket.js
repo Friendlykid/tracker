@@ -11,13 +11,19 @@ import { Timestamp } from "firebase-admin/firestore";
 
 const TRANSFER_EVENT = keccak256("Transfer(address,address,uint256)");
 
+function isValidHexadecimal(str) {
+  const hexRegex = /^0x[0-9a-fA-F]+$|^[0-9a-fA-F]+$/;
+  return hexRegex.test(str);
+}
+
 const sendERC20Transaction =
   (addr, operator = "") =>
   async (tx) => {
     await mailToUsers(addr, COLLECTIONS.ETH_ADDRESSES, "emails_erc_20");
 
     const senderAddr = decodeAddress(tx.topics[1]);
-    const amount = BigNumber.from(tx.data);
+    const hexAmount = isValidHexadecimal(tx.data) ? tx.data : "0x0";
+    const amount = BigNumber.from(hexAmount);
     const tokenAddress = tx.address;
     const tokenInfo = await getTokenInfo(tokenAddress);
     const tokenAmount = tokenInfo
