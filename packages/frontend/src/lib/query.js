@@ -57,7 +57,7 @@ export const useBtcSubscriptions = () => {
   return useQuery({
     queryKey: ["btcSubscriptions"],
     queryFn: async () => {
-      if (!user) return new Error("User not loaded");
+      if (!user) throw new Error("User not loaded");
       const querySnapshot = await getDocs(
         collection(db, COLLECTIONS.BTC_SUBSCRIPTIONS(user.uid))
       );
@@ -67,6 +67,7 @@ export const useBtcSubscriptions = () => {
       });
       return subs;
     },
+    enabled: !!user,
   });
 };
 
@@ -75,7 +76,7 @@ export const useEthSubscriptions = () => {
   return useQuery({
     queryKey: ["ethSubscriptions"],
     queryFn: async () => {
-      if (!user) return new Error("User not loaded");
+      if (!user) throw new Error("User not loaded");
       const querySnapshot = await getDocs(
         collection(db, COLLECTIONS.ETH_SUBSCRIPTIONS(user.uid))
       );
@@ -85,6 +86,7 @@ export const useEthSubscriptions = () => {
       });
       return subs;
     },
+    enabled: !!user,
   });
 };
 

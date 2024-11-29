@@ -17,14 +17,16 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useMemo } from "react";
 
 export default function BtcWallet() {
   const user = useUser();
-  const { data, isFetched } = useAddress();
+  const { data, isFetched, isError } = useAddress();
+  const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
   if (!user) return null;
   return (
     <Layout title="Btc Wallet">
-      {!isFetched ? (
+      {!isOk ? (
         <WalletSkeleton />
       ) : (
         <Stack gap={2}>

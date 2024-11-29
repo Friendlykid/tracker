@@ -1,22 +1,35 @@
 import { useRouter } from "next/router";
 import { useBtcSubscriptions, useEthSubscriptions } from "./query";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { COLLECTIONS } from "@/firebase/constants";
 import { db } from "@/firebase/firebase";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
+const ERROR_DATA_LOADING = "data not loaded";
+const ERROR_NOT_EXISTS = "not exists";
+
 export const useAddress = () => {
   const router = useRouter();
   const { data: btcSubs, isFetched: isBtcFetched } = useBtcSubscriptions();
   const { data: ethSubs, isFetched: isEthFetched } = useEthSubscriptions();
-  const [address, setAddress] = useState(null);
-  const [coll, setColl] = useState(null);
+  const address = useMemo(
+    () => router.asPath.split("/").pop(),
+    [router.asPath]
+  );
+  const coll = useMemo(() => {
+    const pathSegment = router.asPath.split("/")[2];
+    return pathSegment === "btc_wallet"
+      ? COLLECTIONS.BTC_ADDRESSES
+      : pathSegment === "eth_wallet"
+      ? COLLECTIONS.ETH_ADDRESSES
+      : null;
+  }, [router.asPath]);
   const query = useQuery({
-    queryKey: ["btc_wallet", address],
+    queryKey: ["wallet", address],
     queryFn: async () => {
       if (!address || !isBtcFetched || !isEthFetched || !coll) {
-        return Error();
+        throw new Error(ERROR_DATA_LOADING);
       }
       if (
         (!btcSubs.map((sub) => sub.addr).includes(address) &&
@@ -24,64 +37,58 @@ export const useAddress = () => {
         (!ethSubs.map((sub) => sub.addr).includes(address) &&
           coll === COLLECTIONS.ETH_ADDRESSES)
       ) {
-        router.push("/404");
-        return Error();
+        throw new Error(ERROR_NOT_EXISTS);
       }
       const docRef = doc(db, coll, address);
       const docSnap = await getDoc(docRef);
 
       if (!docSnap.exists) {
-        router.push("/404");
-        return Error();
+        throw new Error(ERROR_NOT_EXISTS);
       }
-
       const rootData = docSnap.data();
-      let txSnap;
-      try {
-        txSnap = await getDocs(collection(db, coll, address, "transactions"));
-      } catch (e) {
-        console.error(e);
-        return {
-          initValue: rootData.amount,
-          address,
-          name:
-            coll === COLLECTIONS.BTC_ADDRESSES
-              ? btcSubs.find((addr) => addr.addr === address).name
-              : ethSubs.find((addr) => addr.addr === address).name,
-        };
-      }
-      const txs = [];
-      txSnap.forEach((doc) => {
-        txs.push({ hash: doc.id, ...doc.data() });
-      });
 
-      return {
+      const baseData = {
         initValue: rootData.amount,
-        txs,
         address,
         name: (coll === COLLECTIONS.BTC_ADDRESSES
           ? btcSubs.find((addr) => addr.addr === address)
           : ethSubs.find((addr) => addr.addr === address)
         ).name,
       };
+
+      let txSnap;
+      try {
+        txSnap = await getDocs(collection(db, coll, address, "transactions"));
+      } catch (e) {
+        return {
+          ...baseData,
+          txs: [],
+        };
+      }
+      const txs = [];
+      txSnap.forEach((doc) => {
+        txs.push({ hash: doc.id, ...doc.data() });
+      });
+      return {
+        txs,
+        ...baseData,
+      };
     },
     enabled: !!address && isBtcFetched && isEthFetched && !!coll,
     refetchInterval: 15_000,
+    retry: (failureCount, error) => {
+      if (error.message.includes(ERROR_NOT_EXISTS)) {
+        if (failureCount > 5) router.push("/404");
+        return failureCount < 5;
+      }
+      return error.message.includes(ERROR_DATA_LOADING) || failureCount < 5;
+    },
+    retryDelay: (retryAtempt, error) => {
+      if (error.message.includes(ERROR_NOT_EXISTS)) {
+        return retryAtempt * 2000;
+      }
+      return retryAtempt * 1000;
+    },
   });
-  useEffect(() => {
-    if (!/(btc_wallet|eth_wallet)\//.test(router.asPath)) {
-      setAddress(null);
-      setColl(null);
-    }
-    setAddress(router.asPath.split("/").pop());
-    setColl(
-      router.asPath.split("/")[2] === "btc_wallet"
-        ? COLLECTIONS.BTC_ADDRESSES
-        : router.asPath.split("/")[2] === "eth_wallet"
-        ? COLLECTIONS.ETH_ADDRESSES
-        : null
-    );
-  }, [router.asPath, setAddress]);
-
   return query;
 };
