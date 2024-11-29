@@ -1,28 +1,19 @@
-import { Chart } from "@/components/Chart";
+import { BtcChart } from "@/components/Chart/BtcChart";
 import Layout from "@/components/Layout/Layout";
+import { BtcTable } from "@/components/Table/BtcTable";
 import { WalletSkeleton } from "@/components/WalletSkeleton";
 import { useUser } from "@/lib/query";
 import { useAddress } from "@/lib/useAddressQuery";
 import { Edit } from "@mui/icons-material";
-import {
-  Button,
-  Divider,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Button, Divider, IconButton, Stack, Typography } from "@mui/material";
 import { useMemo } from "react";
-
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import { enqueueSnackbar } from "notistack";
 export default function BtcWallet() {
   const user = useUser();
   const { data, isFetched, isError } = useAddress();
   const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
+
   if (!user) return null;
   return (
     <Layout title="Btc Wallet">
@@ -31,50 +22,35 @@ export default function BtcWallet() {
       ) : (
         <Stack gap={2}>
           <Typography variant="h2">{data.name}</Typography>
-          {data.name !== data.address && (
-            <Typography variant="h4" textOverflow="ellipsis" overflow="hidden">
-              {data.address}
-            </Typography>
-          )}
+          <Stack direction="row">
+            <IconButton
+              title="Copy to Clipboard"
+              onClick={() => {
+                enqueueSnackbar("Copied to Clipboard", { variant: "info" });
+                navigator.clipboard.writeText(data.address);
+              }}
+            >
+              <ContentCopy />
+            </IconButton>
+            {data.name !== data.address && (
+              <Typography
+                variant="h4"
+                textOverflow="ellipsis"
+                overflow="hidden"
+              >
+                {data.address}
+              </Typography>
+            )}
+          </Stack>
+
           <Divider />
-          <Stack direction="row" justifyContent="space-between">
+          <Stack direction="row" justifyContent="space-between" mb={4}>
             <Button startIcon={<Edit />}>Edit subscription</Button>
             <Button disabled>Delete subscription</Button>
           </Stack>
-
-          <Chart />
-
+          <BtcChart />
           <Typography variant="h4">Transactions</Typography>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Hash</TableCell>
-                  <TableCell>Block Height</TableCell>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Amount</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {!data?.txs || data?.txs?.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4}>
-                      <Typography>No transactions recorded yet</Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  [...Array(2)].map((_, index) => (
-                    <TableRow key={index}>
-                      <TableCell>Hello</TableCell>
-                      <TableCell>Hello</TableCell>
-                      <TableCell>Hello </TableCell>
-                      <TableCell>Hello </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <BtcTable />
         </Stack>
       )}
     </Layout>
