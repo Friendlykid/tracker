@@ -31,11 +31,7 @@ const CustomTooltip = (props) => {
   if (active) {
     const currData = payload && payload.length ? payload[0].payload : null;
     return (
-      <Box
-        minHeight={10}
-        minWidth={10}
-        wrapperStyle={{ pointerEvents: "auto" }}
-      >
+      <Box minHeight={10} minWidth={10}>
         <Typography>
           {currData ? format(new Date(currData?.time), "yyyy-MM-dd") : " -- "}
         </Typography>
@@ -171,17 +167,27 @@ export const EthChart = () => {
       {!isOk ? (
         <Skeleton variant="rectangular" width="100%" height={CHART_HEIGHT} />
       ) : (
-        <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
+        <ResponsiveContainer
+          width="100%"
+          height={CHART_HEIGHT}
+          style={{ marginRight: -15 }}
+        >
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
 
-            <XAxis tickCount={5} dataKey="time" tickFormatter={dateFormatter} />
+            <XAxis
+              tickCount={5}
+              dataKey="time"
+              tickFormatter={dateFormatter}
+              tick={{ fontSize: 12, dy: 15 }}
+            />
             <YAxis
               domain={["auto", "auto"]}
               type="number"
               dataKey="balance"
-              tickFormatter={formatNumber}
+              tickFormatter={(value) => formatNumber(value)}
               ticks={ticks}
+              tick={{ fontSize: 12, dy: 5 }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
