@@ -29,9 +29,7 @@ export const wsTemplate = ({
 
   ws.on("error", async (e) => {
     console.error("error: ", e);
-    await delay(
-      e.includes("Unexpected server response 502") ? 60 * 1000 : 1000
-    );
+    await delay(e.includes("Unexpected server response") ? 60 * 1000 : 1000);
     error();
   });
 
