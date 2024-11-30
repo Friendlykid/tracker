@@ -2,6 +2,7 @@ import { COLLECTIONS } from "@/firebase/constants";
 import { auth, db } from "@/firebase/firebase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  deleteDoc,
   doc,
   getDoc,
   runTransaction,
@@ -20,6 +21,7 @@ import {
   doCreateUserWithEmailAndPassword,
   doSignInWithEmailAndPassword,
 } from "@/firebase/auth";
+import { enqueueSnackbar } from "notistack";
 
 export const useSignInMutation = () => {
   const queryClient = useQueryClient();
@@ -167,6 +169,23 @@ export const useSubscribe = ({ ...options }) => {
       await runTransaction(db, async (transaction) => {
         transaction.set(subRef, { address, ...other }, { merge: true });
       });
+    },
+    ...options,
+  });
+};
+
+export const useDeleteSubscription = (options) => {
+  const router = useRouter();
+  const user = useUser();
+  return useMutation({
+    mutationKey: ["deleteSub", router.asPath],
+    mutationFn: async ({ coll, addr }) => {
+      if (!user) throw new Error("user not loaded");
+      return await deleteDoc(doc(db, coll, addr));
+    },
+    onSuccess: () => {
+      router.push("/dashboard/new");
+      enqueueSnackbar("Subscription deleted", { variant: "success" });
     },
     ...options,
   });
