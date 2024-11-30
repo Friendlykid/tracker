@@ -70,8 +70,32 @@ export const useAddress = () => {
       txSnap.forEach((doc) => {
         txs.push({ hash: doc.id, ...doc.data() });
       });
+
+      let tokensSnap;
+      if (coll === COLLECTIONS.ETH_ADDRESSES) {
+        //add tokens
+        try {
+          tokensSnap = await getDocs(collection(db, coll, address, "tokens"));
+        } catch (e) {
+          return {
+            txs,
+            ...baseData,
+          };
+        }
+      }
+      if (!tokensSnap) {
+        return {
+          txs,
+          ...baseData,
+        };
+      }
+      const tokens = [];
+      tokensSnap.forEach((doc) => {
+        tokens.push({ contractAddr: doc.id, ...doc.data() });
+      });
       return {
         txs,
+        tokens,
         ...baseData,
       };
     },

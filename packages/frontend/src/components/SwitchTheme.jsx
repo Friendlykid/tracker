@@ -11,6 +11,7 @@ const SwitchTheme = () => {
     <Stack alignItems="center" pl={2} direction="row" width="100%">
       {mode === "light" ? <LightModeIcon /> : <DarkMode />}
       <Switch
+        name="switch theme"
         checked={mode === "dark"}
         onChange={() => setMode(mode === "light" ? "dark" : "light")}
       />
