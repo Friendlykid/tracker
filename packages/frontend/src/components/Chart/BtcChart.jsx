@@ -17,6 +17,11 @@ import {
 
 const CHART_HEIGHT = 400;
 
+const dateFormatter = (date) => {
+  console.log(date);
+  return format(new Date(date === "" ? 0 : date), "dd/MMM");
+};
+
 const CustomTooltip = (props) => {
   const { active, payload } = props;
   if (active) {
@@ -24,7 +29,7 @@ const CustomTooltip = (props) => {
     return (
       <Box minHeight={10} minWidth={10}>
         <Typography>
-          {currData ? format(new Date(currData?.time), "yyyy-MM-dd") : " -- "}
+          {currData ? dateFormatter(currData?.time) : " -- "}
         </Typography>
         <Typography>
           {"Total balance : "}
@@ -51,10 +56,6 @@ const CustomTooltip = (props) => {
   return null;
 };
 
-const dateFormatter = (date) => {
-  return format(new Date(date === "" ? 0 : date), "dd/MMM");
-};
-
 export const BtcChart = () => {
   const { data, isFetched, isError } = useAddress();
   const user = useUser();
@@ -64,7 +65,7 @@ export const BtcChart = () => {
     if (!isOk) return [];
     const initPoint = {
       balance: data.initValue,
-      time: data.time.toDate() ?? 0,
+      time: data.time?.toDate() ?? 0,
       amount: 0,
     };
     if (data.txs.length === 0) {

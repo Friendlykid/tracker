@@ -95,10 +95,10 @@ export const SubscriptionForm = ({
   }, [isAddressInvalid, isDuplicate, isAddressEmptyError]);
 
   useEffect(() => {
-    if (!isEdit && !blockchain && searchParams.get("addr")) {
+    if (!isEdit && searchParams.get("addr")) {
       setBlockchain(searchParams.get("addr"));
     }
-  }, [searchParams, blockchain, isEdit]);
+  }, [searchParams, isEdit]);
 
   const handleSubmit = async () => {
     if (!address) {

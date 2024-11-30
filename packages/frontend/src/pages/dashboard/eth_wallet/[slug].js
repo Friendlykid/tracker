@@ -1,12 +1,15 @@
 import { EthChart } from "@/components/Chart/EthChart";
+import { DeleteSubscriptionDialog } from "@/components/DeleteSubscriptionDialog";
 import Layout from "@/components/Layout/Layout";
 import { EthTable } from "@/components/Table/EthTable";
 import { WalletSkeleton } from "@/components/WalletSkeleton";
+import { COLLECTIONS } from "@/firebase/constants";
 import { selectTokenAtom } from "@/lib/atoms";
 import { ETHEREUM } from "@/lib/constants";
+import { useDeleteSubscription } from "@/lib/mutations";
 import { useUser } from "@/lib/query";
 import { useAddress } from "@/lib/useAddressQuery";
-import { ContentCopy, Edit } from "@mui/icons-material";
+import { ContentCopy, Delete, Edit } from "@mui/icons-material";
 import {
   Button,
   Divider,
@@ -18,7 +21,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { enqueueSnackbar } from "notistack";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
 
 const sortTokens = (tokens) =>
@@ -36,6 +39,8 @@ export default function EthWallet() {
   const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
   const router = useRouter();
   const [selectedToken, setSelectedToken] = useRecoilState(selectTokenAtom);
+  const { mutate: deleteSubscription } = useDeleteSubscription();
+  const [openDialog, setOpenDialog] = useState(false);
   const tokenList = useMemo(() => {
     const tokens = { [ETHEREUM]: "ETH" };
     if (!isOk || !data.tokens) return tokens;
@@ -93,7 +98,15 @@ export default function EthWallet() {
             >
               Edit subscription
             </Button>
-            <Button disabled>Delete subscription</Button>
+            <Button
+              startIcon={<Delete />}
+              color="error"
+              onClick={() => {
+                setOpenDialog(true);
+              }}
+            >
+              Delete subscription
+            </Button>
           </Stack>
           <EthChart />
           {tokenList && (
@@ -119,6 +132,19 @@ export default function EthWallet() {
           <EthTable />
         </Stack>
       )}
+      <DeleteSubscriptionDialog
+        open={openDialog}
+        handleClose={() => setOpenDialog(false)}
+        action={() => {
+          if (!isOk) return;
+          deleteSubscription({
+            coll: router.asPath.includes("btc_wallet")
+              ? COLLECTIONS.BTC_SUBSCRIPTIONS(user.uid)
+              : COLLECTIONS.ETH_SUBSCRIPTIONS(user.uid),
+            addr: router.asPath.split("/").pop(),
+          });
+        }}
+      />
     </Layout>
   );
 }
