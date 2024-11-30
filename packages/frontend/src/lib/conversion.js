@@ -1,5 +1,11 @@
+import { subDays } from "date-fns";
 import { Timestamp } from "firebase/firestore";
 
+/**
+ *
+ * @param {Timestamp|undefined} timestamp
+ * @returns {Date}
+ */
 export const timestampToDate = (timestamp) => {
   return !timestamp
     ? timestampToDate(getRandomFirestoreTimestamp())
@@ -7,11 +13,8 @@ export const timestampToDate = (timestamp) => {
 };
 
 export const getRandomFirestoreTimestamp = () => {
-  const now = Math.floor(Date.now() / 1000);
-  const tenYearsInSeconds = 10 * 365 * 24 * 60 * 60;
-  const randomSeconds = now - Math.floor(Math.random() * tenYearsInSeconds);
-
-  const randomNanoseconds = Math.floor(Math.random() * 1e9);
-
-  return new Timestamp(randomSeconds, randomNanoseconds);
+  return new Timestamp(
+    subDays(new Date(), 7).getSeconds(),
+    subDays(new Date(), 7).getMilliseconds() / 1000
+  );
 };

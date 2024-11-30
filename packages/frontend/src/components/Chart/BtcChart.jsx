@@ -5,6 +5,7 @@ import { Box, Skeleton, Typography, useTheme } from "@mui/material";
 import { format } from "date-fns";
 import { useMemo } from "react";
 import {
+  CartesianGrid,
   Legend,
   Line,
   LineChart,
@@ -96,7 +97,6 @@ export const BtcChart = () => {
     });
     return dataPoints;
   }, [data, isOk]);
-
   if (!user) return null;
   return (
     <>
@@ -105,8 +105,9 @@ export const BtcChart = () => {
       ) : (
         <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
           <LineChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis tickCount={5} dataKey="time" tickFormatter={dateFormatter} />
-            <YAxis domain={["auto", "auto"]} dataKey="balance" />
+            <YAxis domain={["auto", "auto"]} dataKey="balance" type="number" />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Line
