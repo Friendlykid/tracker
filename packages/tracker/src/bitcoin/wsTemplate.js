@@ -1,4 +1,5 @@
 import { WebSocket } from "ws";
+import { delay } from "../utils/delay.js";
 
 const WEBSOCKET_URL = "wss://ws.blockchain.info/inv";
 
@@ -22,15 +23,21 @@ export const wsTemplate = ({
 
   ws.on("open", () => {
     ws.send(JSON.stringify(open));
-    console.log("opening connection");
   });
 
   ws.on("message", (data) => message(JSON.parse(data.toString())));
 
-  ws.on("error", error);
+  ws.on("error", async (e) => {
+    console.error("error: ", e);
+    await delay(
+      e.includes("Unexpected server response 502") ? 60 * 1000 : 1000
+    );
+    error();
+  });
 
-  ws.on("close", (e) => {
+  ws.on("close", async (e) => {
+    console.log("closing:", e);
+    await delay(1000);
     close(e);
-    console.log("closing connection");
   });
 };
