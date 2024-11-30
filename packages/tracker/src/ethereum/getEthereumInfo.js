@@ -1,4 +1,5 @@
 import { alchemy } from "../config/alchemy.js";
+import { weiToEther } from "../utils/conversion.js";
 
 /**
  *
@@ -6,5 +7,5 @@ import { alchemy } from "../config/alchemy.js";
  * @returns {Promise<String>}
  */
 export const getEthAddressBalance = async (addr) => {
-  return (await alchemy.core.getBalance(addr, "latest")).toString();
+  return weiToEther(await alchemy.core.getBalance(addr, "latest"));
 };

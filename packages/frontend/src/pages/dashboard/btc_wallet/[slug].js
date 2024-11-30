@@ -9,11 +9,12 @@ import { Button, Divider, IconButton, Stack, Typography } from "@mui/material";
 import { useMemo } from "react";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import { enqueueSnackbar } from "notistack";
+import { useRouter } from "next/router";
 export default function BtcWallet() {
   const user = useUser();
   const { data, isFetched, isError } = useAddress();
   const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
-
+  const router = useRouter();
   if (!user) return null;
   return (
     <Layout title="Btc Wallet">
@@ -45,7 +46,16 @@ export default function BtcWallet() {
 
           <Divider />
           <Stack direction="row" justifyContent="space-between" mb={4}>
-            <Button startIcon={<Edit />}>Edit subscription</Button>
+            <Button
+              startIcon={<Edit />}
+              onClick={() =>
+                router.push(
+                  `/dashboard/btc_wallet/edit/${router.asPath.split("/").pop()}`
+                )
+              }
+            >
+              Edit subscription
+            </Button>
             <Button disabled>Delete subscription</Button>
           </Stack>
           <BtcChart />

@@ -41,6 +41,7 @@ const Row = ({ hash, block_height, time, amount, inputs, outs }) => {
             textOverflow: "ellipsis",
             overflow: "hidden",
           }}
+          title={hash}
         >
           <Link
             href={`https://www.blockchain.com/explorer/transactions/btc/${hash}`}
@@ -98,6 +99,7 @@ const Row = ({ hash, block_height, time, amount, inputs, outs }) => {
                           textOverflow: "ellipsis",
                           maxWidth: 100,
                         }}
+                        title={inputAddr}
                       >
                         {inputAddr}
                       </TableCell>
@@ -128,6 +130,7 @@ const Row = ({ hash, block_height, time, amount, inputs, outs }) => {
                           textOverflow: "ellipsis",
                           maxWidth: 100,
                         }}
+                        title={outAddr}
                       >
                         {outAddr}
                       </TableCell>
@@ -167,7 +170,7 @@ export const BtcTable = () => {
           <TableBody>
             {!isOk || !data?.txs || data?.txs?.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4}>
+                <TableCell colSpan={5}>
                   <Typography>No transactions recorded yet</Typography>
                 </TableCell>
               </TableRow>
@@ -192,20 +195,22 @@ export const BtcTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        component={Paper}
-        count={data.txs.length}
-        page={page}
-        rowsPerPageOptions={[5, 10, 20, 50]}
-        onPageChange={(_, newPage) => {
-          setPage(newPage);
-        }}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={(event) => {
-          setRowsPerPage(parseInt(event.target.value, 10));
-          setPage(1);
-        }}
-      />
+      {data.txs.length > 0 && (
+        <TablePagination
+          component={Paper}
+          count={data.txs.length}
+          page={page}
+          rowsPerPageOptions={[5, 10, 20, 50]}
+          onPageChange={(_, newPage) => {
+            setPage(newPage);
+          }}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(1);
+          }}
+        />
+      )}
     </Stack>
   );
 };

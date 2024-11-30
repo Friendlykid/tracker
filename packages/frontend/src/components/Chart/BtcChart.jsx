@@ -26,7 +26,7 @@ const CustomTooltip = (props) => {
           {currData ? format(new Date(currData?.time), "yyyy-MM-dd") : " -- "}
         </Typography>
         <Typography>
-          {"balance : "}
+          {"Total balance : "}
           {currData ? currData?.balance : " -- "}
         </Typography>
         <Typography
@@ -38,7 +38,8 @@ const CustomTooltip = (props) => {
               : "error"
           }
         >
-          {"amount : "}
+          {"Amount : "}
+          {currData?.amount > 0 && "+"}
           {currData?.amount}
           {" BTC"}
         </Typography>
@@ -109,6 +110,7 @@ export const BtcChart = () => {
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Line
+              strokeWidth={2}
               type="monotone"
               dataKey="balance"
               stroke={theme.palette.primary.dark}

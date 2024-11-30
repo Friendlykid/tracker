@@ -21,7 +21,7 @@ export const getBalances = async (addr, counter = 0) => {
 export const addTokenBalances = async (addr) => {
   const tokenBalances = await getBalances(addr);
   const batch = db.batch();
-
+  if (!tokenBalances || tokenBalances?.length === 0) return;
   for await (const token of tokenBalances) {
     const { contractAddress, tokenBalance } = token;
     const tokenInfo = getTokenInfo(contractAddress);
