@@ -18,7 +18,6 @@ import {
 const CHART_HEIGHT = 400;
 
 const dateFormatter = (date) => {
-  console.log(date);
   return format(new Date(date === "" ? 0 : date), "dd/MMM");
 };
 

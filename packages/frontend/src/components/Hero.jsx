@@ -27,11 +27,11 @@ const data = [
   {
     date: new Date(new Date().setFullYear(2024, 3)),
     Ether: 2.0,
-    USDC: 1,
+    USDC: 6,
   },
   {
     date: new Date(new Date().setFullYear(2024, 4)),
-    Ether: 20.0,
+    Ether: 5.0,
     USDC: 7,
   },
   {
@@ -115,12 +115,12 @@ export const Hero = () => {
             <Typography variant="h3" textAlign="center">
               <Typography variant="inherit" color="primary" component="span">
                 Track
-              </Typography>{" "}
-              and{" "}
+              </Typography>
+              {" and "}
               <Typography variant="inherit" color="primary" component="span">
                 Visualize
-              </Typography>{" "}
-              Cryptocurrency Activity Effortlessly!
+              </Typography>
+              {"  Cryptocurrency Activity Effortlessly!"}
             </Typography>
             <Typography textAlign="center">
               Monitor any Bitcoin or Ethereum wallet with ease. Stay informed
