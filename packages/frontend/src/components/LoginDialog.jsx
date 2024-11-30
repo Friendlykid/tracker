@@ -58,7 +58,11 @@ export default function Login() {
     }
   };
   return (
-    <Dialog open={loginOpen && !user} onClose={() => setLoginOpen(false)}>
+    <Dialog
+      open={loginOpen && !user}
+      onClose={() => setLoginOpen(false)}
+      aria-modal="true"
+    >
       <Paper
         elevation={2}
         component={"form"}
@@ -74,12 +78,16 @@ export default function Login() {
             <FormControl>
               <FormLabel>Email</FormLabel>
               <TextField
-                // html input attribute
                 name="email"
                 type="email"
                 placeholder="example@example.com"
                 variant="standard"
                 value={email}
+                slotProps={{
+                  htmlInput: {
+                    autoComplete: "email",
+                  },
+                }}
                 onChange={(e) => {
                   if (emailError) setEmailError(false);
                   setEmail(e.target.value);
@@ -97,6 +105,11 @@ export default function Login() {
                 placeholder="password"
                 value={password}
                 variant="standard"
+                slotProps={{
+                  htmlInput: {
+                    autoComplete: "current-password",
+                  },
+                }}
                 onChange={(e) => {
                   if (passWordError) setPasswordError(false);
                   setPassword(e.target.value);

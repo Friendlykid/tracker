@@ -74,6 +74,11 @@ export default function Settings() {
                 }}
                 helperText={originalError && "Wrong password"}
                 error={originalError}
+                slotProps={{
+                  htmlInput: {
+                    autoComplete: "current-password",
+                  },
+                }}
               />
               <TextField
                 variant="standard"
@@ -82,6 +87,11 @@ export default function Settings() {
                 autoComplete="off"
                 value={newPass}
                 onChange={(event) => setNewPass(event.target.value)}
+                slotProps={{
+                  htmlInput: {
+                    autoComplete: "new-password",
+                  },
+                }}
               />
               <TextField
                 variant="standard"
@@ -92,6 +102,11 @@ export default function Settings() {
                 onChange={(event) => setRetypePass(event.target.value)}
                 error={retypePass !== newPass}
                 helperText={retypePass !== newPass && "Password doesn't match"}
+                slotProps={{
+                  htmlInput: {
+                    autoComplete: "new-password",
+                  },
+                }}
               />
               <Button type="submit" sx={{ maxWidth: 200 }}>
                 Update Password
@@ -110,6 +125,7 @@ export default function Settings() {
         </Button>
       </Stack>
       <Dialog
+        aria-modal
         sx={{
           "& .MuiDialog-paper": {
             width: "80%",

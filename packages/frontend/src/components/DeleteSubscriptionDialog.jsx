@@ -10,6 +10,7 @@ export const DeleteSubscriptionDialog = ({ open, handleClose, action }) => {
           py: 3,
         },
       }}
+      aria-modal="true"
       maxWidth="xs"
       onClose={handleClose}
       open={open}
