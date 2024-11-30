@@ -52,7 +52,7 @@ const CustomTooltip = (props) => {
 };
 
 const dateFormatter = (date) => {
-  return format(new Date(date), "dd/MMM");
+  return format(new Date(date === "" ? 0 : date), "dd/MMM");
 };
 
 export const BtcChart = () => {
@@ -64,22 +64,19 @@ export const BtcChart = () => {
     if (!isOk) return [];
     const initPoint = {
       balance: data.initValue,
-      time: data.time ?? 0,
+      time: data.time.toDate() ?? 0,
       amount: 0,
     };
     if (data.txs.length === 0) {
       return [initPoint, { ...initPoint, time: Date.now() }];
     }
-    const txs = [
-      { balance: data.initValue, time: data.time ?? 0, amount: 0 },
-      ...structuredClone(data.txs),
-    ]
+    const txs = [initPoint, ...structuredClone(data.txs)]
       .map((tx) => ({ ...tx, time: timestampToDate(tx.time) }))
       .sort((a, b) => {
         return a.time - b.time;
       });
 
-    let cumulativeBalance = data.initValue;
+    let cumulativeBalance = initPoint.balance;
     const dataPoints = txs
       .filter((tx) => tx.amount !== "0")
       .map((tx) => {
