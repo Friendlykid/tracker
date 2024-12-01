@@ -74,6 +74,7 @@ const Layout = ({ children, title }) => {
               setIsDrawerOpen(false);
             }}
             sx={{
+              position: { md: "sticky" },
               flexShrink: 0,
               width: DRAWER_WIDTH,
               [`& .MuiDrawer-paper`]: {
