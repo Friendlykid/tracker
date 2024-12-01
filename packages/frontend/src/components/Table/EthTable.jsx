@@ -25,8 +25,8 @@ const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
   return (
     <>
       <TableRow>
-        {internalTxs.length > 0 && (
-          <TableCell sx={{ maxWidth: 40 }}>
+        <TableCell sx={{ maxWidth: 40 }}>
+          {internalTxs.length > 0 && (
             <IconButton
               aria-label="expand row"
               title="Show more"
@@ -35,8 +35,9 @@ const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
             >
               {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
             </IconButton>
-          </TableCell>
-        )}
+          )}
+        </TableCell>
+
         <TableCell
           sx={{
             maxWidth: 150,
@@ -72,7 +73,7 @@ const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
             overflow: "hidden",
           }}
         >
-          {amount}
+          {amount === "0x0" ? "---" : amount}
         </TableCell>
       </TableRow>
       {internalTxs.length > 0 && (
@@ -180,7 +181,7 @@ export const EthTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              {isOk && tableData?.internalTxs?.length > 0 && <TableCell />}
+              <TableCell />
               <TableCell>Hash</TableCell>
               <TableCell>Block Number</TableCell>
               <TableCell>Time</TableCell>
