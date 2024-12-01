@@ -104,7 +104,7 @@ export const useSubscription = (blockchain, address) => {
         address
       );
       const docSnap = await getDoc(docRef);
-      if (!docSnap.exists) return false;
+      if (!docSnap.exists()) return false;
       return docSnap.data();
     },
     enabled: !!blockchain && !!address && !!user,
