@@ -94,7 +94,7 @@ export const SubscriptionForm = ({
     return (
       !isAddressInvalid && !(isDuplicate && isEdit) && !isAddressEmptyError
     );
-  }, [isAddressInvalid, isDuplicate, isAddressEmptyError]);
+  }, [isAddressInvalid, isDuplicate, isAddressEmptyError, isEdit]);
 
   useEffect(() => {
     if (!isEdit && searchParams.get("addr")) {
@@ -144,7 +144,7 @@ export const SubscriptionForm = ({
       >
         {isEdit ? `Edit ${address}` : "Track new wallet"}
       </Typography>
-      <Divider sx={{ mb: 8 }} />
+      <Divider sx={{ mb: 4 }} />
       <TextField
         variant="outlined"
         label='Name, e.g. "MyWallet" (optional)'
