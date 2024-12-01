@@ -31,7 +31,7 @@ export const useSignInMutation = () => {
     mutationFn: async ({ provider, email, password }) => {
       const result =
         provider === "email"
-          ? doSignInWithEmailAndPassword(email, password)
+          ? await doSignInWithEmailAndPassword(email, password)
           : await signInWithPopup(auth, provider);
       const user = result?.user;
 
@@ -65,6 +65,14 @@ export const useSignInMutation = () => {
       queryClient.setQueryData(["user"], () => data);
       router.push("/dashboard/new");
     },
+    onError: (error) => {
+      if (error.message.includes("auth/invalid-credential")) {
+        enqueueSnackbar("Wrong credentials", { variant: "error" });
+        return;
+      }
+      enqueueSnackbar("Something went wrong", { variant: "error" });
+    },
+    throwOnError: false,
   });
 };
 

@@ -31,6 +31,6 @@ export const doPasswordChange = (password) => {
 
 export const doSendEmailVerification = () => {
   return sendEmailVerification(auth.currentUser, {
-    url: `${window.location.origin}/dashboard`,
+    url: `${window.location.origin}/dashboard/new`,
   });
 };
