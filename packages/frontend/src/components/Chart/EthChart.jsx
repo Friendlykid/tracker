@@ -94,7 +94,7 @@ export const EthChart = () => {
           const time = tx.time ?? getRandomFirestoreTimestamp();
           return {
             amount: tx.amount,
-            time: timestampToDate(time)?.getDate(),
+            time: timestampToDate(time)?.getTime(),
             hash: tx.hash,
           };
         })
@@ -105,7 +105,7 @@ export const EthChart = () => {
       return [
         {
           balance: parseFloat(data.initValue),
-          time: timestampToDate(data.time)?.getDate() ?? 0,
+          time: timestampToDate(data.time)?.getTime() ?? 0,
           noAmount: true,
         },
         ...etherTx,
@@ -116,7 +116,7 @@ export const EthChart = () => {
       balance:
         data.tokens.find((token) => token.contractAddr === selectedToken)
           ?.amount ?? 0,
-      time: timestampToDate(data.time)?.getDate(),
+      time: timestampToDate(data.time)?.getTime(),
       amount: 0,
       noAmount: true,
     };
@@ -127,7 +127,10 @@ export const EthChart = () => {
       return [initPoint, { ...initPoint, time: Date.now() }];
     }
     transactionsWithTokens
-      .map((tx) => ({ ...tx, time: timestampToDate(tx.time).getDate() }))
+      .map((tx) => ({
+        ...tx,
+        time: timestampToDate(tx.time).getTime(),
+      }))
       .sort((a, b) => {
         return a.time - b.time;
       });
@@ -138,8 +141,8 @@ export const EthChart = () => {
         cumulativeBalance += parseFloat(tx.amount);
         return {
           time: tx.time
-            ? timestampToDate(tx.time).getDate()
-            : timestampToDate().getDate(),
+            ? timestampToDate(tx.time).getTime()
+            : timestampToDate().getTime(),
           balance: cumulativeBalance,
           amount: parseFloat(tx.amount),
           hash: tx.hash,

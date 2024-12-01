@@ -149,7 +149,14 @@ export default function Settings() {
           >
             No
           </Button>
-          <Button onClick={() => deleteUser(user)}>Yes</Button>
+          <Button
+            onClick={async () => {
+              await deleteUser(user);
+              router.push("/");
+            }}
+          >
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     </Layout>
