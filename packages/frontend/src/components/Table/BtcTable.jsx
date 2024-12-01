@@ -1,8 +1,14 @@
 import { timestampToDate } from "@/lib/conversion";
+import { saveJSON } from "@/lib/export";
 import { useUser } from "@/lib/query";
 import { useAddress } from "@/lib/useAddressQuery";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import {
+  FileDownload,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+} from "@mui/icons-material";
+import {
+  Button,
   Collapse,
   IconButton,
   Link,
@@ -156,6 +162,16 @@ export const BtcTable = () => {
   if (!user) return null;
   return (
     <Stack>
+      <Button
+        sx={{ width: "fit-content", mb: 2 }}
+        disabled={!isOk || data.txs.length === 0}
+        onClick={() => {
+          saveJSON(data.txs);
+        }}
+        startIcon={<FileDownload />}
+      >
+        Export
+      </Button>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -209,7 +225,7 @@ export const BtcTable = () => {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(1);
           }}
-        />
+        ></TablePagination>
       )}
     </Stack>
   );
