@@ -25,16 +25,18 @@ const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
   return (
     <>
       <TableRow>
-        <TableCell sx={{ maxWidth: 40 }}>
-          <IconButton
-            aria-label="expand row"
-            title="Show more"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
-        </TableCell>
+        {internalTxs.length > 0 && (
+          <TableCell sx={{ maxWidth: 40 }}>
+            <IconButton
+              aria-label="expand row"
+              title="Show more"
+              size="small"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+            </IconButton>
+          </TableCell>
+        )}
         <TableCell
           sx={{
             maxWidth: 150,
@@ -63,8 +65,11 @@ const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
           {format(timestampToDate(time), "dd/MM/yy HH:mm") ?? "---"}
         </TableCell>
         <TableCell
+          title={amount}
           sx={{
             maxWidth: 100,
+            textOverflow: "ellipsis",
+            overflow: "hidden",
           }}
         >
           {amount}
@@ -105,10 +110,16 @@ const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
                         >
                           {internal.logIndex}
                         </TableCell>
-                        <TableCell>{internal.from}</TableCell>
-                        <TableCell>{internal.to}</TableCell>
-                        <TableCell>{internal.amount}</TableCell>
-                        <TableCell>
+                        <TableCell component="th" scope="row">
+                          {internal.from}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {internal.to}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {internal.amount}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
                           {internal.tokenName
                             ? `${internal.tokenName} ${internal.symbol}`
                             : internal.contractAddress}
@@ -169,7 +180,7 @@ export const EthTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell />
+              {isOk && tableData?.internalTxs?.length > 0 && <TableCell />}
               <TableCell>Hash</TableCell>
               <TableCell>Block Number</TableCell>
               <TableCell>Time</TableCell>
