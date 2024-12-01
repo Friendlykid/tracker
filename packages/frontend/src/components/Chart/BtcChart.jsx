@@ -18,7 +18,7 @@ import {
 const CHART_HEIGHT = 400;
 
 const dateFormatter = (date) => {
-  return format(new Date(date === "" ? 0 : date), "dd/MMM");
+  return format(new Date(!date ? 0 : date), "dd/MMM");
 };
 
 const CustomTooltip = (props) => {

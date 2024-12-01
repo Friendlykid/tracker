@@ -163,6 +163,9 @@ export const SubscriptionForm = ({
         onChange={(_, value) => {
           setBlockchain(value);
         }}
+        sx={{
+          alignItems: "flex-start",
+        }}
       >
         <FormControlLabel
           value={BITCOIN}
@@ -204,6 +207,9 @@ export const SubscriptionForm = ({
         helperText={addressHelperText}
       />
       <FormControlLabel
+        sx={{
+          width: "fit-content",
+        }}
         control={
           <Checkbox
             checked={isEmail}
@@ -215,6 +221,9 @@ export const SubscriptionForm = ({
       />
       <FormControlLabel
         disabled={blockchain === BITCOIN}
+        sx={{
+          width: "fit-content",
+        }}
         control={
           <Checkbox
             checked={isErc20}

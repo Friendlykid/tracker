@@ -19,7 +19,7 @@ export const AppBar = ({ handleOpenDrawer }) => {
   const mode = useRecoilValue(modeAtom);
   const isSmallScreen = useIsSmallScreen();
   return (
-    <MuiAppBar position="static">
+    <MuiAppBar position="sticky">
       <Toolbar>
         <Stack gap={2} direction="row">
           {isSmallScreen && user && (
