@@ -92,7 +92,7 @@ export default function EthWallet() {
               startIcon={<Edit />}
               onClick={() =>
                 router.push(
-                  `/dashboard/btc_wallet/edit/${router.asPath.split("/").pop()}`
+                  `/dashboard/eth_wallet/edit/${router.asPath.split("/").pop()}`
                 )
               }
             >

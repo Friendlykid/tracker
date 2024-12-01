@@ -42,7 +42,7 @@ export const useAddress = () => {
       const docRef = doc(db, coll, address);
       const docSnap = await getDoc(docRef);
 
-      if (!docSnap.exists) {
+      if (!docSnap.exists()) {
         throw new Error(ERROR_NOT_EXISTS);
       }
       const rootData = docSnap.data();
