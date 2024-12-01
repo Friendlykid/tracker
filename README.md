@@ -5,7 +5,7 @@ Real Time updates with visual with recharts.
 My Bachelor work.
 
 
-Deployed through firebase hosting [here](crypto-tracker-bachelor-thesis--tracker-fb37a.europe-west4.hosted.app)
+Deployed through firebase hosting [here](https://crypto-tracker-bachelor-thesis--tracker-fb37a.europe-west4.hosted.app)
 
 
 Here is example of chart that tracks Binance hotwallet:
