@@ -91,7 +91,9 @@ export const SubscriptionForm = ({
   );
 
   const isFormValid = useMemo(() => {
-    return !isAddressInvalid && !isDuplicate && !isAddressEmptyError;
+    return (
+      !isAddressInvalid && !(isDuplicate && isEdit) && !isAddressEmptyError
+    );
   }, [isAddressInvalid, isDuplicate, isAddressEmptyError]);
 
   useEffect(() => {
@@ -113,13 +115,12 @@ export const SubscriptionForm = ({
         blockchain === BITCOIN
           ? Number(btcBlockHeight)
           : Number(ethBlockHeight);
-      data.name = name !== "" ? name : address;
-      data.alert = isEmail;
     }
     if (blockchain === ETHEREUM) {
       data.watch_tokens = isErc20;
     }
-
+    data.name = name !== "" ? name : address;
+    data.alert = isEmail;
     setSubscription(data);
   };
 
