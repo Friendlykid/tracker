@@ -1,8 +1,14 @@
 import { timestampToDate } from "@/lib/conversion";
+import { saveJSON } from "@/lib/export";
 import { useUser } from "@/lib/query";
 import { useAddress } from "@/lib/useAddressQuery";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import {
+  FileDownload,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+} from "@mui/icons-material";
+import {
+  Button,
   Collapse,
   IconButton,
   Link,
@@ -177,6 +183,16 @@ export const EthTable = () => {
   if (!user) return null;
   return (
     <Stack>
+      <Button
+        sx={{ width: "fit-content", mb: 2 }}
+        disabled={!isOk || tableData.length === 0}
+        onClick={() => {
+          saveJSON(tableData);
+        }}
+        startIcon={<FileDownload />}
+      >
+        Export
+      </Button>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
