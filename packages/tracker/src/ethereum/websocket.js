@@ -77,9 +77,9 @@ export const subscribeEthAddress = (addr) => {
         return;
       }
       await db.doc(COLLECTIONS.ETH_TXS(addr, tx.transaction.hash)).set({
-        amount: `${tx.transaction.to !== addr ? "-" : ""}${weiToEther(
-          tx.transaction.value
-        )}`,
+        amount: `${
+          tx.transaction.to.toLowerCase() !== addr.toLowerCase() ? "-" : ""
+        }${weiToEther(tx.transaction.value)}`,
         from: tx.transaction.from,
         to: tx.transaction.to,
         blockNumber: tx.transaction.blockNumber,

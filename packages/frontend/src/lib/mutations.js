@@ -7,7 +7,6 @@ import {
   getDoc,
   runTransaction,
   setDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useUser } from "./query";
@@ -47,18 +46,8 @@ export const useSignInMutation = () => {
             createdAt: new Date(),
             lastVisited: new Date(),
           });
-          queryClient.setQueryData(["lastVisited"], () => new Date());
-        } else {
-          queryClient.setQueryData(
-            ["lastVisited"],
-            () => userSnapshot.data().lastVisited
-          );
-          await updateDoc(userRef, {
-            lastVisited: new Date(),
-          });
         }
       }
-
       return user;
     },
     onSuccess: (data) => {
@@ -90,11 +79,8 @@ export const useRegisterUser = () => {
           uid: user.uid,
           email: email,
           createdAt: new Date(),
-          lastVisited: new Date(),
         });
-        queryClient.setQueryData(["lastVisited"], () => new Date());
       }
-
       return user;
     },
     onSuccess: (data) => {
