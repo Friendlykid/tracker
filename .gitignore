@@ -12,6 +12,7 @@
 /coverage
 packages/tracker/btcBlock.json
 packages/tracker/ethLogs.json
+packages/tracker/balance.json
 
 # next.js
 /packages/frontend/.next/

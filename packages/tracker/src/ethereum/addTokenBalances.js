@@ -4,6 +4,7 @@ import { getTokenInfo } from "../config/cache.js";
 import { db } from "../config/firebase.js";
 import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { delay } from "../utils/delay.js";
+import { formatUnits } from "ethers/utils";
 
 export const getBalances = async (addr, counter = 0) => {
   if (counter > 5) return;
@@ -35,9 +36,7 @@ export const addTokenBalances = async (addr) => {
       {
         ...(tokenInfo
           ? {
-              amount: BigNumber.from(tokenBalance)
-                .div(tokenInfo.decimals)
-                .toString(),
+              amount: formatUnits(tokenBalance, tokenInfo.decimals),
               logoURI: tokenInfo.logoURI,
               symbol: tokenInfo.symbol,
             }
