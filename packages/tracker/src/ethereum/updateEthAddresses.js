@@ -24,19 +24,22 @@ export const updateEthAddresses = async () => {
             const amount = await getEthAddressBalance(change.doc.id);
 
             // set initial info
-            await addrRef
-              .doc(change.doc.id)
-              .update({
-                initial_block_number: blockNumber,
-                amount,
-                time: Timestamp.fromDate(new Date()),
-              });
+            await addrRef.doc(change.doc.id).update({
+              initial_block_number: blockNumber,
+              amount,
+              time: Timestamp.fromDate(new Date()),
+            });
           }
 
           // listen for new transactions
           subscribeEthAddress(change.doc.id);
           if (change.doc.data().erc_20_counter !== 0) {
-            await addTokenBalances(change.doc.id);
+            const tokensSnap = await addrRef
+              .doc(change.doc.id)
+              .collection("tokens")
+              .limit(1)
+              .get();
+            if (tokensSnap.size !== 0) await addTokenBalances(change.doc.id);
             subscribeEthERC20Address(change.doc.id);
           }
         } catch (error) {
