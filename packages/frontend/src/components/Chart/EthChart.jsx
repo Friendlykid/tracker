@@ -1,4 +1,3 @@
-import { selectTokenAtom } from "@/lib/atoms";
 import { ETHEREUM } from "@/lib/constants";
 import { getRandomFirestoreTimestamp, timestampToDate } from "@/lib/conversion";
 import { useUser } from "@/lib/query";
@@ -17,7 +16,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useRecoilValue } from "recoil";
 
 const CHART_HEIGHT = 400;
 
@@ -78,12 +76,11 @@ const dateFormatter = (date) => {
   return format(new Date(date === "" ? 0 : date), "dd/MMM");
 };
 
-export const EthChart = () => {
+export const EthChart = ({ selectedToken }) => {
   const { data, isFetched, isError } = useAddress();
   const user = useUser();
   const isOk = isFetched && !isError;
   const theme = useTheme();
-  const selectedToken = useRecoilValue(selectTokenAtom);
   const chartData = useMemo(() => {
     if (!isOk || !data.txs) return [];
     if (selectedToken === ETHEREUM) {
