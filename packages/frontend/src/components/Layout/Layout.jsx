@@ -1,4 +1,4 @@
-import { Box, Drawer, styled } from "@mui/material";
+import { Box, CssBaseline, Drawer, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import Login from "../LoginDialog";
 import { useUser } from "@/lib/query";
@@ -47,7 +47,8 @@ const Layout = ({ children, title }) => {
     }
   }, [user, router]);
   return (
-    <>
+    <Box>
+      <CssBaseline />
       <Head>
         <title>
           {title ? `Crypto adress watch - ${title}` : "Crypto adress watch"}
@@ -74,7 +75,6 @@ const Layout = ({ children, title }) => {
               setIsDrawerOpen(false);
             }}
             sx={{
-              position: { md: "sticky" },
               flexShrink: 0,
               width: DRAWER_WIDTH,
               [`& .MuiDrawer-paper`]: {
@@ -91,7 +91,7 @@ const Layout = ({ children, title }) => {
         <MainStyle>{children}</MainStyle>
       </Box>
       <Login />
-    </>
+    </Box>
   );
 };
 
