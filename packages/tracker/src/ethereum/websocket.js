@@ -84,7 +84,10 @@ export const subscribeEthAddress = (addr) => {
         }${weiToEther(tx.transaction.value)}`,
         from: tx.transaction.from,
         to: tx.transaction.to,
-        blockNumber: tx.transaction.blockNumber,
+        blockNumber:
+          typeof tx.transaction.blockNumber === "number"
+            ? tx.transaction.blockNumber.toString()
+            : parseInt(tx.transaction.blockNumber, 16),
         blockHash: tx.transaction.blockHash,
         time: Timestamp.fromDate(new Date()),
         logoURI:
