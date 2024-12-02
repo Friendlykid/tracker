@@ -8,6 +8,7 @@ import { COLLECTIONS } from "../config/firestoreConstants.js";
 import { weiToEther } from "../utils/conversion.js";
 import { mailToUsers } from "../email/sendEmails.js";
 import { Timestamp } from "firebase-admin/firestore";
+import { formatUnits } from "ethers/utils";
 
 const TRANSFER_EVENT = keccak256("Transfer(address,address,uint256)");
 
@@ -27,7 +28,7 @@ const sendERC20Transaction =
     const tokenAddress = tx.address;
     const tokenInfo = await getTokenInfo(tokenAddress);
     const tokenAmount = tokenInfo
-      ? amount.div(tokenInfo.decimals).toString()
+      ? formatUnits(amount, tokenInfo.decimals)
       : amount;
     db.doc(
       COLLECTIONS.ETH_TXS(addr, `${tx.transactionHash}-${Number(tx.logIndex)}`)

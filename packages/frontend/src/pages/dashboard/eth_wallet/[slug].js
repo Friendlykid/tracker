@@ -4,7 +4,6 @@ import Layout from "@/components/Layout/Layout";
 import { EthTable } from "@/components/Table/EthTable";
 import { WalletSkeleton } from "@/components/WalletSkeleton";
 import { COLLECTIONS } from "@/firebase/constants";
-import { selectTokenAtom } from "@/lib/atoms";
 import { ETHEREUM } from "@/lib/constants";
 import { useDeleteSubscription } from "@/lib/mutations";
 import { useUser } from "@/lib/query";
@@ -21,8 +20,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { enqueueSnackbar } from "notistack";
-import { useMemo, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useEffect, useMemo, useState } from "react";
 
 const sortTokens = (tokens) =>
   Object.keys(tokens).sort((a, b) => {
@@ -38,7 +36,7 @@ export default function EthWallet() {
   const { data, isFetched, isError } = useAddress();
   const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
   const router = useRouter();
-  const [selectedToken, setSelectedToken] = useRecoilState(selectTokenAtom);
+  const [selectedToken, setSelectedToken] = useState(ETHEREUM);
   const { mutate: deleteSubscription } = useDeleteSubscription();
   const [openDialog, setOpenDialog] = useState(false);
   const tokenList = useMemo(() => {
@@ -56,7 +54,9 @@ export default function EthWallet() {
       });
     return tokens;
   }, [data, isOk]);
-
+  useEffect(() => {
+    setSelectedToken(ETHEREUM);
+  }, [router.asPath, setSelectedToken]);
   if (!user) return null;
   return (
     <Layout title="Eth Wallet">
@@ -108,7 +108,7 @@ export default function EthWallet() {
               Delete subscription
             </Button>
           </Stack>
-          <EthChart />
+          <EthChart selectedToken={selectedToken} />
           {tokenList && (
             <TextField
               select
