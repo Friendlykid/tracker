@@ -52,6 +52,7 @@ const sendERC20Transaction =
 
 // only for watching ether transactions
 export const subscribeEthAddress = (addr) => {
+  console.log(`subscribeERC20 for ${addr}`);
   if (!addr) return;
   alchemy.ws.on(
     {
@@ -96,6 +97,7 @@ export const subscribeEthAddress = (addr) => {
 };
 
 export const subscribeEthERC20Address = (addr = []) => {
+  console.log(`subscribeERC20 for ${addr}`);
   //adress sends token
   alchemy.ws.on(
     {
@@ -116,6 +118,7 @@ export const subscribeEthERC20Address = (addr = []) => {
 };
 
 export const unsubscribeEthAddress = (addr) => {
+  console.log(`unsubscribe Eth for ${addr}`);
   alchemy.ws.on({
     method: AlchemySubscription.MINED_TRANSACTIONS,
     addresses: [
@@ -132,6 +135,7 @@ export const unsubscribeEthAddress = (addr) => {
 };
 
 export const unsubscribeEthErc20Address = (addr) => {
+  console.log(`unsubscribe Eth ERC20 for ${addr}`);
   alchemy.ws.off({
     topics: [TRANSFER_EVENT, encodeAddress(addr), null],
     hashesOnly: false,
