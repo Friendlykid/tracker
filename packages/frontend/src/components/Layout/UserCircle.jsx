@@ -10,6 +10,7 @@ import {
   MenuItem,
   Drawer,
   List,
+  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -21,7 +22,7 @@ export const UserCircle = ({ openLogin }) => {
   const router = useRouter();
   const open = Boolean(anchorEl);
   const user = useUser();
-
+  const theme = useTheme();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const handleMenuClick = (event) => {
@@ -39,7 +40,11 @@ export const UserCircle = ({ openLogin }) => {
 
   if (!user) {
     return (
-      <Button variant="contained" onClick={openLogin}>
+      <Button
+        variant="contained"
+        color={theme.palette.mode === "light" ? "secondary" : "primary"}
+        onClick={openLogin}
+      >
         Login
       </Button>
     );

@@ -1,7 +1,7 @@
 import { loginAtom } from "@/lib/atoms";
 import { percChange } from "@/lib/percentage";
 import { useUser } from "@/lib/query";
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { blue, deepOrange } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import {
@@ -107,6 +107,7 @@ export const Hero = () => {
   const setLogin = useSetRecoilState(loginAtom);
   const user = useUser();
   const router = useRouter();
+  const theme = useTheme();
   return (
     <Box justifyItems="center" alignItems="center">
       <Stack gap={4} alignItems="center">
@@ -130,6 +131,7 @@ export const Hero = () => {
             </Typography>
             <Button
               variant="contained"
+              color={theme.palette.mode === "light" ? "secondary" : "primary"}
               sx={{ maxWidth: 200 }}
               onClick={() => {
                 if (user) {
