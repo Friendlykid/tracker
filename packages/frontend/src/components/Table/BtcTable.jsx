@@ -225,7 +225,7 @@ export const BtcTable = () => {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(1);
           }}
-        ></TablePagination>
+        />
       )}
     </Stack>
   );

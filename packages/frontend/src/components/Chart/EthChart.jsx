@@ -19,9 +19,15 @@ import {
 
 const CHART_HEIGHT = 400;
 
-const formatNumber = (value) => {
-  const abr = new NumberAbbreviate().abbreviate(parseFloat(value), 2);
-  return abr;
+const formatTicks = (value) => {
+  // eslint-disable-next-line no-undef
+  return new Intl.NumberFormat("en-US", { notation: "scientific" }).format(
+    value
+  );
+};
+
+const formatTooltip = (value) => {
+  return new NumberAbbreviate().abbreviate(parseFloat(value), 2);
 };
 
 const CustomTooltip = (props) => {
@@ -35,7 +41,7 @@ const CustomTooltip = (props) => {
         </Typography>
         <Typography>
           {"Total balance : "}
-          {currData ? formatNumber(currData?.balance) : " -- "}
+          {currData ? formatTooltip(currData?.balance) : " -- "}
           {currData.symbol && ` ${currData.symbol}`}
         </Typography>
         {!currData.noAmount && (
@@ -188,7 +194,7 @@ export const EthChart = ({ selectedToken }) => {
               domain={["auto", "auto"]}
               type="number"
               dataKey="balance"
-              tickFormatter={(value) => formatNumber(value)}
+              tickFormatter={(value) => formatTicks(value)}
               ticks={ticks}
               tick={{ fontSize: 12, dy: 5 }}
             />
