@@ -52,7 +52,7 @@ const sendERC20Transaction =
 
 // only for watching ether transactions
 export const subscribeEthAddress = (addr) => {
-  console.log(`subscribeERC20 for ${addr}`);
+  console.log(`subscribeETH for ${addr}`);
   if (!addr) return;
   alchemy.ws.on(
     {
