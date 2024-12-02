@@ -114,7 +114,13 @@ export const EthChart = ({ selectedToken }) => {
           time: timestampToDate(data.time)?.getTime() ?? 0,
           noAmount: true,
         },
-        ...etherTx,
+        ...(etherTx.length !== 0
+          ? etherTx
+          : {
+              balance: parseFloat(data.initValue),
+              time: Date.now(),
+              noAmount: true,
+            }),
       ];
     }
 
