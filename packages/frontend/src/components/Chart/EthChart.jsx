@@ -98,6 +98,9 @@ export const EthChart = () => {
             hash: tx.hash,
           };
         })
+        .sort((a, b) => {
+          return a.time - b.time;
+        })
         .map(({ amount, ...other }) => {
           cumulativeBalance += parseFloat(amount);
           return { balance: cumulativeBalance, amount, ...other };
