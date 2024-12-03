@@ -47,6 +47,7 @@ export const useEthBlockHeight = () => {
     queryFn: async () => {
       const response = await fetch("/api/ethBlockNumber");
       if (response.ok) return await response.text();
+      throw new Error("block number not loaded");
     },
     refetchInterval: 1 * 60 * 1000,
   });
