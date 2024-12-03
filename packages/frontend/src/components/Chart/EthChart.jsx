@@ -116,11 +116,13 @@ export const EthChart = ({ selectedToken }) => {
         },
         ...(etherTx.length !== 0
           ? etherTx
-          : {
-              balance: parseFloat(data.initValue),
-              time: Date.now(),
-              noAmount: true,
-            }),
+          : [
+              {
+                balance: parseFloat(data.initValue),
+                time: Date.now(),
+                noAmount: true,
+              },
+            ]),
       ];
     }
 

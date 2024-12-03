@@ -109,7 +109,7 @@ export default function EthWallet() {
             </Button>
           </Stack>
           <EthChart selectedToken={selectedToken} />
-          {tokenList && (
+          {tokenList && Object.keys(tokenList).length > 1 && (
             <TextField
               select
               aria-label="select"
