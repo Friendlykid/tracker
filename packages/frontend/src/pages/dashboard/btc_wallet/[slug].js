@@ -27,7 +27,9 @@ export default function BtcWallet() {
         <WalletSkeleton />
       ) : (
         <Stack gap={2}>
-          <Typography variant="h2">{data.name}</Typography>
+          <Typography textOverflow="ellipsis" overflow="hidden" variant="h2">
+            {data.name}
+          </Typography>
           <Stack direction="row">
             <IconButton
               title="Copy to Clipboard"
@@ -38,15 +40,14 @@ export default function BtcWallet() {
             >
               <ContentCopy />
             </IconButton>
-            {data.name !== data.address && (
-              <Typography
-                variant="h4"
-                textOverflow="ellipsis"
-                overflow="hidden"
-              >
-                {data.address}
-              </Typography>
-            )}
+            <Typography
+              variant="h4"
+              component="h3"
+              textOverflow="ellipsis"
+              overflow="hidden"
+            >
+              {data.address}
+            </Typography>
           </Stack>
 
           <Divider />

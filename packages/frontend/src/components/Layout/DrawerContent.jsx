@@ -45,85 +45,87 @@ export const DrawerContent = () => {
   );
   return (
     <Stack justifyContent="space-between" my={2} height="100%">
-      <List
-        sx={{
-          width: "100%",
-          maxWidth: 360,
-          "& .MuiListItemButton-root": { mb: 0.5 },
-        }}
-        component="nav"
-      >
-        <ListItemButton
-          selected={router.asPath.includes("/new")}
-          onClick={() => setSubOpen((old) => !old)}
-        >
-          <ListItemIcon>
-            <Add />
-          </ListItemIcon>
-          <ListItemText
-            primary="New Subscription"
-            sx={{ whiteSpace: "nowrap" }}
-          />
-
-          {subOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-        <Collapse in={subOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton
-              selected={router.asPath.includes(
-                "/dashboard/new" + "?" + createQueryString("addr", BITCOIN)
-              )}
-              sx={{ pl: 4 }}
-              onClick={() => {
-                router.push(
-                  "/dashboard/new" + "?" + createQueryString("addr", BITCOIN)
-                );
-              }}
-            >
-              <ListItemIcon>
-                <Bitcoin />
-              </ListItemIcon>
-              <ListItemText primary="Track Bitcoin wallet" />
-            </ListItemButton>
-          </List>
-          <List component="div" disablePadding>
-            <ListItemButton
-              selected={router.asPath.includes(
-                "/dashboard/new" + "?" + createQueryString("addr", ETHEREUM)
-              )}
-              sx={{ pl: 4 }}
-              onClick={() => {
-                router.push(
-                  "/dashboard/new" + "?" + createQueryString("addr", ETHEREUM)
-                );
-              }}
-            >
-              <ListItemIcon>
-                <Ethereum />
-              </ListItemIcon>
-              <ListItemText
-                sx={{ whiteSpace: "nowrap" }}
-                primary="Track Ethereum wallet"
-              />
-            </ListItemButton>
-          </List>
-        </Collapse>
-      </List>
       <Stack>
-        <SubscriptionList
-          shouldCollapse={shouldBtcCollapse}
-          Icon={Bitcoin}
-          subs={isBtcFetched ? btcSubscriptions : undefined}
-          title="Bitcoin Subscriptions"
-          path={"/dashboard/btc_wallet/"}
-        />
-        <SubscriptionList
-          shouldCollapse={shouldEthCollapse}
-          Icon={Ethereum}
-          subs={isEthFetched ? ethSubscriptions : undefined}
-          title="Ethereum Subscriptions"
-          path={"/dashboard/eth_wallet/"}
-        />
+        <List
+          sx={{
+            width: "100%",
+            maxWidth: 360,
+            "& .MuiListItemButton-root": { mb: 0.5 },
+          }}
+          component="nav"
+        >
+          <ListItemButton
+            selected={router.asPath.includes("/new")}
+            onClick={() => setSubOpen((old) => !old)}
+          >
+            <ListItemIcon>
+              <Add />
+            </ListItemIcon>
+            <ListItemText
+              primary="New Subscription"
+              sx={{ whiteSpace: "nowrap" }}
+            />
+
+            {subOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={subOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton
+                selected={router.asPath.includes(
+                  "/dashboard/new" + "?" + createQueryString("addr", BITCOIN)
+                )}
+                sx={{ pl: 4 }}
+                onClick={() => {
+                  router.push(
+                    "/dashboard/new" + "?" + createQueryString("addr", BITCOIN)
+                  );
+                }}
+              >
+                <ListItemIcon>
+                  <Bitcoin />
+                </ListItemIcon>
+                <ListItemText primary="Track Bitcoin wallet" />
+              </ListItemButton>
+            </List>
+            <List component="div" disablePadding>
+              <ListItemButton
+                selected={router.asPath.includes(
+                  "/dashboard/new" + "?" + createQueryString("addr", ETHEREUM)
+                )}
+                sx={{ pl: 4 }}
+                onClick={() => {
+                  router.push(
+                    "/dashboard/new" + "?" + createQueryString("addr", ETHEREUM)
+                  );
+                }}
+              >
+                <ListItemIcon>
+                  <Ethereum />
+                </ListItemIcon>
+                <ListItemText
+                  sx={{ whiteSpace: "nowrap" }}
+                  primary="Track Ethereum wallet"
+                />
+              </ListItemButton>
+            </List>
+          </Collapse>
+        </List>
+        <Stack>
+          <SubscriptionList
+            shouldCollapse={shouldBtcCollapse}
+            Icon={Bitcoin}
+            subs={isBtcFetched ? btcSubscriptions : undefined}
+            title="Bitcoin Subscriptions"
+            path={"/dashboard/btc_wallet/"}
+          />
+          <SubscriptionList
+            shouldCollapse={shouldEthCollapse}
+            Icon={Ethereum}
+            subs={isEthFetched ? ethSubscriptions : undefined}
+            title="Ethereum Subscriptions"
+            path={"/dashboard/eth_wallet/"}
+          />
+        </Stack>
       </Stack>
       <SwitchTheme />
     </Stack>
