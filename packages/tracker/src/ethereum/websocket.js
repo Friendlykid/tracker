@@ -28,7 +28,7 @@ const sendERC20Transaction =
     const tokenAddress = tx.address;
     const tokenInfo = await getTokenInfo(tokenAddress);
     const tokenAmount = tokenInfo
-      ? formatUnits(amount, tokenInfo.decimals)
+      ? formatUnits(hexAmount, tokenInfo.decimals)
       : amount;
     db.doc(
       COLLECTIONS.ETH_TXS(addr, `${tx.transactionHash}-${Number(tx.logIndex)}`)

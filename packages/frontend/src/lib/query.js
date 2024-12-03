@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { BITCOIN } from "./constants";
+import { getEthBlockHeight } from "@/firebase/functions";
 
 export const useLastVisitedQuery = () => {
   return useQuery({
@@ -45,7 +46,7 @@ export const useEthBlockHeight = () => {
   return useQuery({
     queryKey: ["ethBlockHeight"],
     queryFn: async () => {
-      const response = await fetch("/api/ethBlockNumber");
+      const response = await getEthBlockHeight();
       if (response.ok) return await response.text();
       throw new Error("block number not loaded");
     },
