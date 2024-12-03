@@ -4,7 +4,6 @@ import { readFile } from "fs/promises";
 import path from "path";
 
 const cache = new NodeCache({ stdTTL: 0 });
-const btcTxCache = new NodeCache();
 
 export const cacheTokens = async () => {
   const oneInchList = JSON.parse(
@@ -44,16 +43,4 @@ export const getBtcBlockHeight = async () => {
 
 export const updateBtcBlockHeight = (newHeight) => {
   cache.set("btcHeight", newHeight, 9 * 60);
-};
-
-export const addUncomfirmedBtcTransaction = (addr, hash) => {
-  btcTxCache.set(hash, addr);
-};
-
-export const getUncofirmedBtcTxHashes = () => {
-  return btcTxCache.keys();
-};
-
-export const removeBtcTxsFromCache = (hashes) => {
-  return hashes.map((hash) => btcTxCache.take(hash));
 };
