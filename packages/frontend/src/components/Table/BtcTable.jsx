@@ -157,7 +157,7 @@ export const BtcTable = () => {
   const user = useUser();
   const { data, isFetched, isError } = useAddress();
   const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   if (!user) return null;
   return (
