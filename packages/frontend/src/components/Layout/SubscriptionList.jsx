@@ -40,6 +40,7 @@ export const SubscriptionList = ({
               flexWrap: "nowrap",
               "& > *": { alignItems: "center" },
               py: 1,
+              backgroundColor: "initial",
             }}
           >
             <ListItemIcon>

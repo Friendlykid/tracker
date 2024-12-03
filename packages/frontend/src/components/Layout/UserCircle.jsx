@@ -41,6 +41,8 @@ export const UserCircle = ({ openLogin }) => {
   if (!user) {
     return (
       <Button
+        name="login-button"
+        aria-label="login-button"
         variant="contained"
         color={theme.palette.mode === "light" ? "secondary" : "primary"}
         onClick={openLogin}
@@ -52,7 +54,7 @@ export const UserCircle = ({ openLogin }) => {
 
   return (
     <>
-      <IconButton onClick={handleMenuClick}>
+      <IconButton aria-label="user-icon" onClick={handleMenuClick}>
         <AccountCircle />
       </IconButton>
 
@@ -66,7 +68,7 @@ export const UserCircle = ({ openLogin }) => {
                 handleClose();
               }}
             >
-              <ListItemIcon>
+              <ListItemIcon aria-label="open-subscriptions-button">
                 <Settings />
               </ListItemIcon>
               <ListItemText>Settings</ListItemText>

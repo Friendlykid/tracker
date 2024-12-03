@@ -4,6 +4,7 @@ import {
   Toolbar,
   Typography,
   Stack,
+  useTheme,
 } from "@mui/material";
 import { UserCircle } from "./UserCircle";
 import { Logo } from "../Icons/Logo";
@@ -18,22 +19,23 @@ export const AppBar = ({ handleOpenDrawer }) => {
   const setLoginDialog = useSetRecoilState(loginAtom);
   const mode = useRecoilValue(modeAtom);
   const isSmallScreen = useIsSmallScreen();
+  const theme = useTheme();
   return (
     <MuiAppBar
       position="sticky"
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{ zIndex: { md: theme.zIndex.drawer + 1, sm: theme.zIndex.appBar } }}
     >
       <Toolbar>
         <Stack gap={2} direction="row">
           {isSmallScreen && user && (
-            <IconButton onClick={handleOpenDrawer}>
+            <IconButton aria-label="menu-button" onClick={handleOpenDrawer}>
               <Menu />
             </IconButton>
           )}
           <IconButton
+            aria-label="logo"
             size="large"
             edge="start"
-            color="inherit"
             sx={{ mr: 2 }}
             disabled
           >

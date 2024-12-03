@@ -154,12 +154,13 @@ export const SubscriptionForm = ({
         slotProps={{ htmlInput: { autoComplete: "off" } }}
         sx={{ maxWidth: MAX_TEXT_FIELD_WIDTH }}
       />
-      <FormLabel id="blockchain-radio" sx={{ mb: -2 }}>
+      <FormLabel id="blockchain-radio" sx={{ mb: -2 }} component="span">
         Select Blockchain:
       </FormLabel>
       <RadioGroup
         aria-labelledby="blockchain-radio"
         name="blockchain"
+        id="blockchain"
         value={blockchain}
         onChange={(_, value) => {
           setBlockchain(value);
@@ -206,6 +207,7 @@ export const SubscriptionForm = ({
         }}
         error={isAddressInvalid || isDuplicate || isAddressEmptyError}
         helperText={addressHelperText}
+        slotProps={{ htmlInput: { autoComplete: "off" } }}
       />
       <FormControlLabel
         sx={{
@@ -216,6 +218,7 @@ export const SubscriptionForm = ({
             checked={isEmail}
             onChange={(_, checked) => setIsEmail(checked)}
             name="email"
+            inputProps={{ autoComplete: "off" }}
           />
         }
         label="Do you want to be notified via email?"
@@ -230,6 +233,7 @@ export const SubscriptionForm = ({
             checked={isErc20}
             onChange={(_, checked) => setIsErc20(checked)}
             name="erc20"
+            inputProps={{ autoComplete: "off" }}
           />
         }
         label="Do you want to track ERC-20 Tokens?"
