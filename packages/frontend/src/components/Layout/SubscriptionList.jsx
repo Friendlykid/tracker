@@ -31,6 +31,7 @@ export const SubscriptionList = ({
             onClick={() => {
               if (shouldCollapse) setIsOpen((old) => !old);
             }}
+            disableSticky
             component={"nav"}
             id={`${title}-subheader`}
             sx={{
