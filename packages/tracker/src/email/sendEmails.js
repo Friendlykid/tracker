@@ -10,7 +10,9 @@ export const mailToUsers = async (address, coll, property = "emails") => {
 };
 
 export const sendEmails = async (emails = []) => {
-  const emailsToSend = emails.filter((email) => !cache.has(email));
+  const validEmails = emails?.filter(Boolean);
+  if (validEmails.length === 0 || !emails) return;
+  const emailsToSend = validEmails.filter((email) => !cache.has(email));
   if (emailsToSend.length === 0) return;
   cache.mset(emailsToSend.map((email) => ({ [email]: email })));
   try {
