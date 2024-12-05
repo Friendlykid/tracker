@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { BITCOIN } from "./constants";
-import { getEthBlockHeight } from "@/firebase/functions";
+import { getEthBlockHeight, getRandomChartData } from "@/firebase/functions";
 
 export const useLastVisitedQuery = () => {
   return useQuery({
@@ -112,4 +112,18 @@ export const useSubscription = (blockchain, address) => {
     enabled: !!blockchain && !!address && !!user,
   });
   return query;
+};
+
+export const useRandomChartQuery = () => {
+  return useQuery({
+    queryKey: ["randomBtcChart"],
+    queryFn: async () => {
+      return await getRandomChartData();
+    },
+    staleTime: Infinity,
+    refetchInterval: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
 };
