@@ -29,24 +29,29 @@ export const getBtcAmount = (addr, tx) => {
   return `${amount !== "0" ? "-" : ""}${amount}`;
 };
 
+const convertToBtc = (obj) =>
+  Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, satsToBtc(value)])
+  );
+
 const filterTx = (tx) => {
   const inputs = tx.inputs.reduce((acc, input) => {
-    acc[input.prev_out?.addr ?? "block_reward"] = satsToBtc(
-      BigInt(input.prev_out.value)
-    );
+    const key = input.prev_out?.addr ?? "block_reward";
+    acc[key] = (acc[key] ?? 0n) + BigInt(input.prev_out.value);
     return acc;
   }, {});
 
   const outs = tx.out.reduce((acc, out) => {
-    acc[out?.addr ?? "block_reward"] = satsToBtc(BigInt(out.value));
+    const key = out?.addr ?? "unknown";
+    acc[key] = (acc[key] ?? 0n) + BigInt(out.value);
     return acc;
   }, {});
 
   return {
     hash: tx.hash,
     block_height: tx.block_height,
-    inputs,
-    outs,
+    inputs: convertToBtc(inputs),
+    outs: convertToBtc(outs),
   };
 };
 
