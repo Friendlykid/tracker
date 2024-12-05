@@ -48,6 +48,17 @@ const CustomTooltip = (props) => {
           {currData?.amount}
           {" BTC"}
         </Typography>
+        {currData?.hash && (
+          <Typography
+            textOverflow="ellipsis"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            sx={{ maxWidth: 200 }}
+          >
+            {"Hash: "}
+            {currData.hash}
+          </Typography>
+        )}
       </Box>
     );
   }
@@ -85,6 +96,7 @@ export const BtcChart = ({ isRoot = false, sampleData = [] }) => {
           time: tx.time.getTime(),
           balance: cumulativeBalance,
           amount: parseFloat(tx.amount),
+          hash: tx.hash,
         };
       });
     dataPoints.push({

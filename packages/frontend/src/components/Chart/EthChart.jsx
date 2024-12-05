@@ -42,7 +42,7 @@ const CustomTooltip = (props) => {
         <Typography>
           {"Total balance : "}
           {currData ? formatTooltip(currData?.balance) : " -- "}
-          {currData.symbol && ` ${currData.symbol}`}
+          {currData?.symbol && ` ${currData.symbol}`}
         </Typography>
         {!currData.noAmount && (
           <Typography
@@ -57,7 +57,7 @@ const CustomTooltip = (props) => {
             {"Amount : "}
             {currData?.amount > 0 && "+"}
             {currData?.amount}
-            {currData.symbol && ` ${currData.symbol}`}
+            {currData?.symbol && ` ${currData.symbol}`}
           </Typography>
         )}
         {currData.hash && (
@@ -74,7 +74,6 @@ const CustomTooltip = (props) => {
       </Box>
     );
   }
-
   return null;
 };
 
@@ -99,6 +98,7 @@ export const EthChart = ({ selectedToken }) => {
             amount: tx.amount,
             time: timestampToDate(time)?.getTime(),
             hash: tx.hash,
+            symbol: tx.symbol,
           };
         })
         .sort((a, b) => {
@@ -133,6 +133,8 @@ export const EthChart = ({ selectedToken }) => {
       time: timestampToDate(data.time)?.getTime(),
       amount: 0,
       noAmount: true,
+      symbol: data.tokens.find((token) => token.contractAddr === selectedToken)
+        ?.symbol,
     };
     const transactionsWithTokens = data.txs.filter((tx) => {
       return tx.contractAddress === selectedToken;
@@ -160,6 +162,7 @@ export const EthChart = ({ selectedToken }) => {
           balance: cumulativeBalance,
           amount: parseFloat(tx.amount),
           hash: tx.hash,
+          symbol: tx?.symbol,
         };
       });
     dataPoints.push({
@@ -167,6 +170,7 @@ export const EthChart = ({ selectedToken }) => {
       balance: cumulativeBalance,
       amount: 0,
       noAmount: true,
+      symbol: initPoint?.symbol,
     });
     return [initPoint, ...dataPoints];
   }, [data, isOk, selectedToken]);
