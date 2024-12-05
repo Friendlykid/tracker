@@ -14,7 +14,7 @@ export const sendEmails = async (emails = []) => {
   if (validEmails.length === 0 || !emails) return;
   const emailsToSend = validEmails.filter((email) => !cache.has(email));
   if (emailsToSend.length === 0) return;
-  cache.mset(emailsToSend.map((email) => ({ [email]: email })));
+  cache.mset(emailsToSend.map((email) => ({ key: email, value: email })));
   try {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const response = await sgMail.sendMultiple({
