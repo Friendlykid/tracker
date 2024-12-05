@@ -55,7 +55,7 @@ const CustomTooltip = (props) => {
   return null;
 };
 
-export const BtcChart = () => {
+export const BtcChart = ({ isRoot = false, sampleData = [] }) => {
   const { data, isFetched, isError } = useAddress();
   const user = useUser();
   const isOk = isFetched && !isError;
@@ -94,14 +94,14 @@ export const BtcChart = () => {
     });
     return dataPoints;
   }, [data, isOk]);
-  if (!user) return null;
+  if (!user && !isRoot) return null;
   return (
     <>
-      {!isOk ? (
+      {!isOk && !isRoot ? (
         <Skeleton variant="rectangular" width="100%" height={CHART_HEIGHT} />
       ) : (
         <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
-          <LineChart data={chartData}>
+          <LineChart data={isRoot ? sampleData : chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis tickCount={5} dataKey="time" tickFormatter={dateFormatter} />
             <YAxis domain={["auto", "auto"]} dataKey="balance" type="number" />

@@ -1,110 +1,21 @@
 import { loginAtom } from "@/lib/atoms";
-import { percChange } from "@/lib/percentage";
-import { useUser } from "@/lib/query";
-import { Box, Button, Paper, Stack, Typography, useTheme } from "@mui/material";
-import { blue, deepOrange } from "@mui/material/colors";
-import { useRouter } from "next/router";
+import { useRandomChartQuery, useUser } from "@/lib/query";
 import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+  Box,
+  Button,
+  Paper,
+  Skeleton,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
+import { BtcChart } from "./Chart/BtcChart";
 
-const data = [
-  {
-    date: new Date(new Date().setFullYear(2024, 1)),
-    Ether: 1.5,
-    USDC: 3.0,
-  },
-  {
-    date: new Date(new Date().setFullYear(2024, 2)),
-    Ether: 1.8,
-    USDC: 5,
-  },
-  {
-    date: new Date(new Date().setFullYear(2024, 3)),
-    Ether: 2.0,
-    USDC: 6,
-  },
-  {
-    date: new Date(new Date().setFullYear(2024, 4)),
-    Ether: 5.0,
-    USDC: 7,
-  },
-  {
-    date: new Date(new Date().setFullYear(2024, 5)),
-    Ether: 2.1,
-    USDC: 2,
-  },
-  {
-    date: new Date(new Date().setFullYear(2024, 6)),
-    Ether: 1.9,
-    USDC: 6,
-  },
-  {
-    date: new Date(new Date().setFullYear(2024, 7)),
-    Ether: 2.3,
-    USDC: 4,
-  },
-];
-
-const CustomTooltip = ({ payload, active }) => {
-  if (active && payload && payload.length) {
-    return (
-      <Box>
-        {payload.map((load, i) => {
-          const percentage = percChange(data[0][load.name], load.value);
-          return (
-            <Typography key={`${load.value}-${i}`}>
-              {`${load.name} : ${load.value} `}
-              <Typography
-                component="span"
-                color={
-                  percentage === 0
-                    ? "info"
-                    : percentage > 0
-                    ? "success"
-                    : "error"
-                }
-              >{`(${percentage}%)`}</Typography>
-            </Typography>
-          );
-        })}
-      </Box>
-    );
-  }
-
-  return null;
-};
-
-const HeroChart = () => {
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-
-        <Tooltip content={CustomTooltip} />
-        <Line
-          strokeWidth={2}
-          type="monotone"
-          dataKey="Ether"
-          stroke={deepOrange[500]}
-        />
-        <Line
-          strokeWidth={2}
-          type="monotone"
-          dataKey="USDC"
-          stroke={blue[500]}
-        />
-      </LineChart>
-    </ResponsiveContainer>
-  );
-};
 export const Hero = () => {
   const setLogin = useSetRecoilState(loginAtom);
+  const { data, isFetched } = useRandomChartQuery();
   const user = useUser();
   const router = useRouter();
   const theme = useTheme();
@@ -154,7 +65,16 @@ export const Hero = () => {
           p={2}
           elevation={6}
         >
-          <HeroChart />
+          {!isFetched ? (
+            <Skeleton variant="rectangular" width="100%" height="100%" />
+          ) : (
+            <Stack alignItems="center" gap={2}>
+              <Typography variant="h4">
+                Sample visualization of Coincheck exchange
+              </Typography>
+              <BtcChart isRoot sampleData={data} />
+            </Stack>
+          )}
         </Paper>
       </Stack>
     </Box>
