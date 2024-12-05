@@ -24,24 +24,34 @@ import {
   Typography,
 } from "@mui/material";
 import { format } from "date-fns";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { EthSubTableErc } from "./EthSubTableErc";
+import { EthSubTableEth } from "./EthSubTableEth";
+import { useRouter } from "next/router";
 
-const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
+const Row = ({
+  hash,
+  amount,
+  blockNumber,
+  time,
+  internalTxs = [],
+  to,
+  from,
+  symbol,
+}) => {
   const [open, setOpen] = useState(false);
   return (
     <>
       <TableRow>
         <TableCell sx={{ maxWidth: 40 }}>
-          {internalTxs.length > 0 && (
-            <IconButton
-              aria-label="expand row"
-              title="Show more"
-              size="small"
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-            </IconButton>
-          )}
+          <IconButton
+            aria-label="expand row"
+            title="Show more"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
         </TableCell>
 
         <TableCell
@@ -82,70 +92,28 @@ const Row = ({ hash, amount, blockNumber, time, internalTxs = [] }) => {
           {amount === "0x0" ? "---" : amount}
         </TableCell>
       </TableRow>
-      {internalTxs.length > 0 && (
-        <TableRow sx={{ borderBottom: "none" }}>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Stack>
-                <Table size="small" aria-label="internal tx">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Log Index</TableCell>
-                      <TableCell>From</TableCell>
-                      <TableCell>To</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Contract Address</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {internalTxs.map((internal) => (
-                      <TableRow
-                        key={internal.logIndex}
-                        sx={{
-                          "& > *": {
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            maxWidth: 100,
-                            borderBottom: "none",
-                          },
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          title={internal.logIndex}
-                        >
-                          {internal.logIndex}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {internal.from}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {internal.to}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {internal.amount}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {internal.tokenName
-                            ? `${internal.tokenName} ${internal.symbol}`
-                            : internal.contractAddress}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Stack>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      )}
+
+      <TableRow sx={{ borderBottom: "none" }}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Stack>
+              {internalTxs.length > 0 && (
+                <EthSubTableErc internalTxs={internalTxs} />
+              )}
+              {symbol === "ETH" && (
+                <EthSubTableEth amount={amount} from={from} to={to} />
+              )}
+            </Stack>
+          </Collapse>
+        </TableCell>
+      </TableRow>
     </>
   );
 };
 
 export const EthTable = () => {
   const user = useUser();
+  const router = useRouter();
   const { data, isFetched, isError } = useAddress();
   const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
   const [page, setPage] = useState(0);
@@ -179,6 +147,10 @@ export const EthTable = () => {
       return acc;
     }, []);
   }, [data, isOk]);
+
+  useEffect(() => {
+    setPage(0);
+  }, [router.asPath]);
 
   if (!user) return null;
   return (
@@ -225,6 +197,9 @@ export const EthTable = () => {
                   hash={tx.hash}
                   time={tx.time}
                   internalTxs={tx.internalTxs}
+                  from={tx.from}
+                  to={tx.to}
+                  symbol={tx.symbol}
                 />
               ))
             )}

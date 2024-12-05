@@ -24,7 +24,8 @@ import {
   Typography,
 } from "@mui/material";
 import { format } from "date-fns";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 
 const Row = ({ hash, block_height, time, amount, inputs, outs }) => {
   const [open, setOpen] = useState(false);
@@ -155,10 +156,14 @@ const Row = ({ hash, block_height, time, amount, inputs, outs }) => {
 
 export const BtcTable = () => {
   const user = useUser();
+  const router = useRouter();
   const { data, isFetched, isError } = useAddress();
   const isOk = useMemo(() => isFetched && !isError, [isFetched, isError]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  useEffect(() => {
+    setPage(0);
+  }, [router.asPath]);
   if (!user) return null;
   return (
     <Stack>
