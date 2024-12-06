@@ -28,7 +28,9 @@ const CustomTooltip = (props) => {
     return (
       <Box minHeight={10} minWidth={10}>
         <Typography>
-          {currData ? dateFormatter(currData?.time) : " -- "}
+          {currData
+            ? format(new Date(currData?.time ?? 0), "HH:mm dd/MMM")
+            : " -- "}
         </Typography>
         <Typography>
           {"Total balance : "}
@@ -75,7 +77,7 @@ export const BtcChart = ({ isRoot = false, sampleData = [] }) => {
     if (!isOk) return [];
     const initPoint = {
       balance: data.initValue,
-      time: data.time?.toDate() ?? 0,
+      time: data.time ? timestampToDate(data.time).getTime() : 0,
       amount: 0,
     };
     if (data.txs.length === 0) {
