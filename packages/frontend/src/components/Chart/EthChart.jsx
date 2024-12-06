@@ -37,7 +37,7 @@ const CustomTooltip = (props) => {
     return (
       <Box minHeight={10} minWidth={10}>
         <Typography>
-          {currData ? format(new Date(currData?.time), "yyyy-MM-dd") : " -- "}
+          {currData ? format(new Date(currData?.time), "HH:mm dd/MMM") : " -- "}
         </Typography>
         <Typography>
           {"Total balance : "}
